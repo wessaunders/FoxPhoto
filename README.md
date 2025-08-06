@@ -8,7 +8,7 @@ FoxPhoto is a desktop application built with Electron, React v19, and Zustand, d
 * **Thumbnail Grid:** View all images in a selected folder as a responsive grid of thumbnails.
 * **Full Image View:** Open images in a full-screen mode with navigation controls (next/previous).
 * **Loading & Error Handling:** Visual feedback for loading states and graceful handling of errors.
-* **Modern UI:** Clean and intuitive user interface powered by Shadcn UI and Tailwind CSS.
+* **Modern UI:** Clean and intuitive user interface powered by Mantine UI.
 
 ## 🚀 Getting Started
 
