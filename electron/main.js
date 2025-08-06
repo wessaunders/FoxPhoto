@@ -1,0 +1,110 @@
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const fs = require('fs');
+
+const isDev = process.env.NODE_ENV === 'development';
+
+function createWindow() {
+    const win = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        minWidth: 800,
+        minHeight: 600,
+        webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+        // Security best practices
+        nodeIntegration: false,
+        contextIsolation: true,
+        webSecurity: true,
+        },
+    });
+
+    if (isDev) {
+        win.loadURL('http://localhost:5173');
+        win.webContents.openDevTools();
+    } else {
+        win.loadFile(path.join(__dirname, '../dist/renderer/index.html'));
+    }
+}
+
+app.whenReady().then(() => {
+    createWindow();
+
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+        }
+    });
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+// Main process IPC handlers
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+
+// Function to get root drives on Windows/Linux or root directory on macOS
+const getRootDrives = () => {
+    if (process.platform === 'win32') {
+        const drives = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(d => `${d}:\\`);
+        return drives.filter(d => {
+        try {
+            fs.accessSync(d, fs.constants.F_OK);
+            return true;
+        } catch (err) {
+            return false;
+        }
+        });
+    } else {
+        // For macOS and Linux, the root is '/'
+        return ['/'];
+    }
+};
+
+// IPC handler to get root directories
+ipcMain.handle('get-root-dirs', async () => {
+    try {
+        return getRootDrives();
+    } catch (error) {
+        console.error('Failed to get root directories:', error);
+        return [];
+    }
+});
+
+// IPC handler to read a directory
+ipcMain.handle('read-directory', async (event, folderPath) => {
+    try {
+        const files = fs.readdirSync(folderPath, { withFileTypes: true });
+        const directories = [];
+        const images = [];
+
+        for (const file of files) {
+        const fullPath = path.join(folderPath, file.name);
+        if (file.isDirectory()) {
+            directories.push({ name: file.name, path: fullPath });
+        } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+            images.push({ name: file.name, path: fullPath });
+        }
+        }
+        return { directories, images };
+    } catch (error) {
+        console.error(`Failed to read directory ${folderPath}:`, error);
+        return { directories: [], images: [], error: error.message };
+    }
+});
+
+// IPC handler to read an image and return as a data URL
+ipcMain.handle('read-image', async (event, imagePath) => {
+    try {
+        const buffer = fs.readFileSync(imagePath);
+        const mimeType = `image/${path.extname(imagePath).substring(1)}`;
+        const dataUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
+        return dataUrl;
+    } catch (error) {
+        console.error(`Failed to read image ${imagePath}:`, error);
+        return null;
+    }
+});

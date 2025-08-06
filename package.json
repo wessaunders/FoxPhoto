@@ -1,0 +1,45 @@
+{
+    "name": "foxphoto",
+    "version": "1.0.0",
+    "description": "A cross-platform desktop image viewer.",
+    "main": "electron/main.js",
+    "author": "Wes Saunders",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "electron-dev": "concurrently \"npm run dev\" \"electron .\"",
+        "build": "vite build",
+        "start": "electron .",
+        "electron": "electron .",
+        "electron-pack": "electron-builder --dir",
+        "electron-dist": "electron-builder"        
+    },
+    "dependencies": {
+        "@emotion/react": "^11.14.0",
+        "@mantine/core": "^8.2.3",
+        "@mantine/hooks": "^8.2.3",
+        "@tabler/icons-react": "^3.34.1",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
+        "zustand": "^5.0.7"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.7.0",
+        "concurrently": "^9.2.0",
+        "electron": "^37.2.6",
+        "electron-builder": "^26.0.12",
+        "vite": "^7.0.6"
+    },
+    "build": {
+        "appId": "com.telekineticlou.foxphoto",
+        "files": [
+            "dist/**/*",
+            "main.js",
+            "preload.js"
+        ],
+        "directories": {
+            "buildResources": "assets"
+        }
+    }
+}
