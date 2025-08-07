@@ -26,7 +26,7 @@ const Slideshow = () => {
         
         // Set a new interval for the slideshow
         timerRef.current = setInterval(() => {
-        nextSlide();
+            nextSlide();
         }, slideshowDelay);
 
         // Cleanup function to clear the interval when the component unmounts
@@ -52,7 +52,7 @@ const Slideshow = () => {
         window.addEventListener('keydown', handleKeyPress);
 
         return () => {
-        window.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('keydown', handleKeyPress);
         };
     }, [nextSlide, previousSlide, stopSlideshow]);
     
@@ -65,77 +65,77 @@ const Slideshow = () => {
 
     return (
         <Box
-        style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'var(--mantine-color-body)',
-            zIndex: 1000,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden'
-        }}
-        >
-        <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img
-            key={currentImage}
-            src={currentImage}
-            alt={`Slideshow image ${slideshowIndex + 1}`}
-            className={`slideshow-image ${effectClassName}`}
-            />
-        </Box>
-
-        {/* Controls */}
-        <Box
             style={{
-            position: 'absolute',
-            top: '1rem',
-            right: '1rem',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: 'var(--mantine-color-body)',
+                zIndex: 1000,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                overflow: 'hidden'
             }}
         >
-            <Group>
-            <SlideshowControls />
-            <Button onClick={stopSlideshow} size="lg" color="red" variant="subtle" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                <IconX size={24} />
-            </Button>
-            </Group>
-        </Box>
+            <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <img
+                    key={currentImage}
+                    src={currentImage}
+                    alt={`Slideshow image ${slideshowIndex + 1}`}
+                    className={`slideshow-image ${effectClassName}`}
+                />
+            </Box>
 
-        <Box
-            style={{
-            position: 'absolute',
-            bottom: '1rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            }}
-        >
-            <Group>
-            <Button onClick={previousSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                <IconChevronLeft size={24} />
-            </Button>
-            <Button onClick={nextSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                <IconChevronRight size={24} />
-            </Button>
-            </Group>
-        </Box>
+            {/* Controls */}
+            <Box
+                style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                }}
+            >
+                <Group>
+                    <SlideshowControls />
+                    <Button onClick={stopSlideshow} size="lg" color="red" variant="subtle" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                        <IconX size={24} />
+                    </Button>
+                </Group>
+            </Box>
 
-        <Box
-            style={{
-            position: 'absolute',
-            bottom: '1rem',
-            right: '1rem',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            padding: '0.5rem 1rem',
-            borderRadius: '5px',
-            }}
-        >
-            <Text c="white" size="lg">
-            {slideshowIndex + 1} / {slideshowImages.length}
-            </Text>
-        </Box>
+            <Box
+                style={{
+                position: 'absolute',
+                bottom: '1rem',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                }}
+            >
+                <Group>
+                <Button onClick={previousSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                    <IconChevronLeft size={24} />
+                </Button>
+                <Button onClick={nextSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                    <IconChevronRight size={24} />
+                </Button>
+                </Group>
+            </Box>
+
+            <Box
+                style={{
+                position: 'absolute',
+                bottom: '1rem',
+                right: '1rem',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                padding: '0.5rem 1rem',
+                borderRadius: '5px',
+                }}
+            >
+                <Text c="white" size="lg">
+                    {slideshowIndex + 1} / {slideshowImages.length}
+                </Text>
+            </Box>
         </Box>
     );
 };
