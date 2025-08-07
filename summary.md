@@ -9,21 +9,20 @@ Core Components: App.jsx, main.jsx, store.js, FileExplorer.jsx, ThumbnailGrid.js
 
 2. Features Implemented & Resolved Issues
 We have successfully implemented the following core features:
-File System Navigation: The application can read root directories and navigate through folders.
-Thumbnail Grid: Images are displayed in a responsive thumbnail grid.
-Full Image View: Clicking a thumbnail opens a full-screen view with next/previous navigation.
-Light/Dark Mode: The theme can now be toggled correctly using Mantine's built-in useMantineColorScheme hook.
-Starting Folder: The application has the ability to set a specific folder as the starting point, stored in the Zustand store.
-Slideshow: A slideshow feature has been added with user-configurable delay and two effects ("fade" and "wipe"). The slideshow can display selected images or all images in the current folder.
+- File System Navigation: The application can read root directories and navigate through folders.
+- Thumbnail Grid: Images are displayed in a responsive thumbnail grid.
+- Full Image View: Clicking a thumbnail opens a full-screen view with next/previous navigation.
+- Light/Dark Mode: The theme can now be toggled correctly using Mantine's built-in useMantineColorScheme hook.
+- Starting Folder: The application has the ability to set a specific folder as the starting point, stored in the Zustand store.
+- Slideshow: A slideshow feature has been added with user-configurable delay and two effects ("fade" and "wipe"). The slideshow can display selected images or all images in the current folder.
+- Settings Persistence: We implemented the ability to persist the starting folder and slideshow settings between sessions. This required updates to the Zustand store, the React App component, and the Electron main.js and preload.js files to handle file I/O.
+
 
 
 3. Recent Progress & Debugging
-Our most recent work has focused on debugging and adding persistence to the application.
-- Slideshow Debugging: We resolved an issue where slideshow effects were not working correctly. The solution involved refactoring the Slideshow.jsx component to use a single <img> tag with a dynamic key prop and updating Slideshow.css to use @keyframes for smooth and reliable animations.
-- Settings Persistence: We implemented the ability to persist the starting folder and slideshow settings between sessions. This required:
-  - Adding saveSettings and loadSettings actions to the store.js.
-  - Updating the App.jsx component to load settings on startup.
-  - Creating new IPC handlers in the Electron main.js to save and load a settings.json file in the user's data directory.
+Our most recent work has focused on implementing a filename search feature. This was accomplished by:
+- Updating store.js: We added a new searchTerm state variable and a setSearchTerm action. The readDirectory action was modified to filter images based on the searchTerm.
+- Updating App.jsx: We integrated a TextInput component with a search icon (IconSearch) into the header. This input is tied to the searchTerm state, which automatically triggers the filtering logic when the user types.
 
 
 4. Next Steps

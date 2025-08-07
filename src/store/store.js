@@ -14,6 +14,7 @@ const useFoxPhotoStore = create((set, get) => ({
         isLoadingImage: false,
     },
     rootDirs: [],
+    searchTerm: '',
     selectedImage: null,
     selectedImagesForSlideshow: [],
     slideshowDelay: 3000, // Default 3 second delay
@@ -101,10 +102,15 @@ const useFoxPhotoStore = create((set, get) => ({
                 images: [] 
             });
         } else {
+            const { searchTerm } = get();
+            const filteredImages = searchTerm
+                ? result.images.filter(img => img.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                : result.images;
+
             set({
                 currentPath: folderPath,
                 directories: result.directories,
-                images: result.images,
+                images: filteredImages,
                 error: null,
             });
         }
@@ -126,6 +132,11 @@ const useFoxPhotoStore = create((set, get) => ({
     selectImage: (imagePath) => {
         set({ selectedImage: imagePath });
     }, 
+
+    setSearchTerm: (term) => {
+        set({ searchTerm: term });
+        get().readDirectory(get().currentPath);
+    },
 
     setSlideshowDelay: (delay) => {
         set({ slideshowDelay: delay });

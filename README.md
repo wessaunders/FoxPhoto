@@ -89,23 +89,24 @@ To create distributable packages for your operating system (Windows, macOS, Linu
 
 ```
 foxphoto/
-├── index.html              # Main HTML for the Electron renderer
-├── package.json            # Project metadata and dependencies
+├── index.html                  # Main HTML for the Electron renderer
+├── package.json                # Project metadata and dependencies
 ├── electron/
-│   ├── main.js             # Electron Main Process (backend operations)
-│   ├── preload.js          # Electron Preload Script (secure IPC bridge)
+│   ├── main.js                 # Electron Main Process (backend operations)
+│   ├── preload.js              # Electron Preload Script (secure IPC bridge)
 └── src/
     ├── hooks/
     │   └── useImageDataLoader.js
     ├── store/
-    │   └── store.js        # Zustand global state store
-    ├── App.jsx             # Main React application component
-    ├── FileExplorer.jsx    # File explorer component
-    ├── FullImageView.jsx   # Full image view component
-    ├── ImageThumbnail.jsx  # Thumbnail image component
+    │   └── store.js            # Zustand global state store
+    ├── App.jsx                 # Main React application component
+    ├── FileExplorer.jsx        # File explorer component
+    ├── FullImageView.jsx       # Full image view component
+    ├── ImageThumbnail.jsx      # Thumbnail image component
     ├── main.jsx            
-    ├── Slideshow.jsx       # Slideshow component
-    └── ThumbnailGrid.jsx   # Thumbnail grid component
+    ├── Slideshow.jsx           # Slideshow component
+    ├── SlideshowControls.jsx   # Slideshow controls component
+    └── ThumbnailGrid.jsx       # Thumbnail grid component
 ```
 
 ## 🔒 Security Considerations

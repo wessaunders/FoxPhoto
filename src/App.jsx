@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { Paper, 
+    Anchor, 
     AppShell, 
+    Breadcrumbs, 
+    Button, 
     Flex, 
     Group, 
-    Text, 
-    Breadcrumbs, 
-    Anchor, 
-    Button, 
-    Box, 
     LoadingOverlay, 
+    TextInput,
     Title,
     useMantineColorScheme } from '@mantine/core';
-import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSun } from '@tabler/icons-react';
+import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import FileExplorer from './FileExplorer';
 import ThumbnailGrid from './ThumbnailGrid';
@@ -27,8 +26,10 @@ function App() {
         loadSettings,
         loadingState, 
         readDirectory, 
+        searchTerm,
         selectedImage,
         selectedImagesForSlideshow,
+        setSearchTerm,
         setStartingPath,
         startingPath,
         startSlideshow
@@ -95,7 +96,13 @@ function App() {
                                 onClick={startSlideshow}
                                 disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
                                 Slideshow
-                            </Button>                        
+                            </Button>   
+                            <TextInput
+                                placeholder="Search images"
+                                value={searchTerm}
+                                onChange={(event) => setSearchTerm(event.currentTarget.value)}
+                                leftSection={<IconSearch size={16} />}
+                            />                     
                             <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
                                 Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
                             </Button>
