@@ -20,10 +20,12 @@ We have successfully implemented the following core features:
 
 
 3. Recent Progress & Debugging
-Our most recent work has focused on implementing a filename search feature. This was accomplished by:
-- Updating store.js: We added a new searchTerm state variable and a setSearchTerm action. The readDirectory action was modified to filter images based on the searchTerm.
-- Updating App.jsx: We integrated a TextInput component with a search icon (IconSearch) into the header. This input is tied to the searchTerm state, which automatically triggers the filtering logic when the user types.
+Our most recent work has focused on implementing a filename search feature. We've now refined this functionality further by:
+- Filtering Directories and Images: The search term now filters both image files and subfolders in the current directory, making the search much more powerful.
+- Clear Search Button: We added a clear button to the search input field in the header, which allows users to quickly remove the search term and see all files again.
+- Code Updates: This was accomplished with updates to the store.js to handle filtering both types of items and the App.jsx to add the clear button logic.
+
 
 
 4. Next Steps
-The application is in a very stable and functional state. What would you like to work on next? Perhaps we could implement a search function to find images in the current directory, add more slideshow effects, or create a way to bookmark favorite folders?
+The application is in a very stable and functional state. What would you like to work on next? We could refine the search functionality by adding a debounced search to improve performance, add more slideshow effects, or create a way to bookmark favorite folders.
