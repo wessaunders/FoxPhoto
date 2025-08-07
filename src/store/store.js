@@ -20,7 +20,7 @@ const useFoxPhotoStore = create((set, get) => ({
     slideshowEffect: 'fade', // Default fade effect
     slideshowImages: [],
     slideshowIndex: 0,
-    startingPath: "C:\\Users\\Boss\\Pictures",
+    startingPath: null,
 
     // Actions
     closeImage: () => {
