@@ -45,6 +45,17 @@ const useFoxPhotoStore = create((set, get) => ({
         });
     },
 
+    loadSettings: async () => {
+        const settings = await electronAPI.loadSettings();
+        if (settings) {
+            set({
+                startingPath: settings.startingPath,
+                slideshowDelay: settings.slideshowDelay,
+                slideshowEffect: settings.slideshowEffect,
+            });
+        }
+    },
+
     nextImage: () => {
         const { images, selectedImage } = get();
         const currentIndex = images.findIndex(img => img.path === selectedImage);
@@ -106,20 +117,29 @@ const useFoxPhotoStore = create((set, get) => ({
         });
     },
 
+    saveSettings: async () => {
+        const { startingPath, slideshowDelay, slideshowEffect } = get();
+        const settings = { startingPath, slideshowDelay, slideshowEffect };
+        await electronAPI.saveSettings(settings);
+    },
+
     selectImage: (imagePath) => {
         set({ selectedImage: imagePath });
     }, 
 
     setSlideshowDelay: (delay) => {
         set({ slideshowDelay: delay });
+        get().saveSettings();
     },
 
     setSlideshowEffect: (effect) => {
         set({ slideshowEffect: effect });
+        get().saveSettings();
     },
 
     setStartingPath: (path) => {
         set({ startingPath: path });
+        get().saveSettings();
     },
 
     startSlideshow: () => {

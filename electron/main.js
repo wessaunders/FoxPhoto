@@ -11,11 +11,11 @@ function createWindow() {
         minWidth: 800,
         minHeight: 600,
         webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-        // Security best practices
-        nodeIntegration: false,
-        contextIsolation: true,
-        webSecurity: true,
+            preload: path.join(__dirname, 'preload.js'),
+            // Security best practices
+            nodeIntegration: false,
+            contextIsolation: true,
+            webSecurity: true,
         },
     });
 
@@ -32,7 +32,7 @@ app.whenReady().then(() => {
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+            createWindow();
         }
     });
 });
@@ -74,6 +74,21 @@ ipcMain.handle('get-root-dirs', async () => {
     }
 });
 
+ipcMain.handle('load-settings', async () => {
+    const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+    try {
+        const settingsData = await fs.promises.readFile(settingsPath, 'utf-8');
+        return JSON.parse(settingsData);
+    } catch (error) {
+        // If file doesn't exist, return null to indicate no saved settings
+        if (error.code === 'ENOENT') {
+            return null;
+        }
+        console.error('Failed to load settings:', error);
+        return null;
+    }
+});
+
 // IPC handler to read a directory
 ipcMain.handle('read-directory', async (event, folderPath) => {
     try {
@@ -106,5 +121,16 @@ ipcMain.handle('read-image', async (event, imagePath) => {
     } catch (error) {
         console.error(`Failed to read image ${imagePath}:`, error);
         return null;
+    }
+});
+
+ipcMain.handle('save-settings', async (event, settings) => {
+    const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+    try {
+        await fs.promises.writeFile(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
+        return { success: true };
+    } catch (error) {
+        console.error('Failed to save settings:', error);
+        return { success: false, error: error.message };
     }
 });

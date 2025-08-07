@@ -11,7 +11,7 @@ import { Paper,
     LoadingOverlay, 
     Title,
     useMantineColorScheme } from '@mantine/core';
-import { IconArrowBackUp, IconPlayerPlay, IconPlayerPause, IconSun, IconMoon } from '@tabler/icons-react';
+import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSun } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import FileExplorer from './FileExplorer';
 import ThumbnailGrid from './ThumbnailGrid';
@@ -24,16 +24,23 @@ function App() {
         getRootDirs, 
         images,
         isSlideshowActive,
+        loadSettings,
         loadingState, 
         readDirectory, 
         selectedImage,
         selectedImagesForSlideshow,
+        setStartingPath,
         startingPath,
         startSlideshow
     } = useFoxPhotoStore();
 
     // Use Mantine's built-in color scheme hook
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
+        // Initial load for settings and then directories
+    useEffect(() => {
+        loadSettings();
+    }, [loadSettings]);
 
     // Initial fetch for root directories on app load
     useEffect(() => {
@@ -51,7 +58,9 @@ function App() {
     });
 
     const handleNavigateUp = () => {
-        if (currentPath === '/') return;
+        if (currentPath === '/') {
+            return;
+        }
         
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
         readDirectory(parentPath || '/');
@@ -66,26 +75,32 @@ function App() {
                 navbar={{ width: 300, breakpoint: 'sm' }}
                 padding="md">
                 <AppShell.Header p="xs" style={{ borderBottom: 'none' }}>
-                <Group justify="space-between" h="100%">
-                    <Title order={1} size="h3">FoxPhoto</Title>
-                    <Group>
-                        {currentPath !== '/' && (
-                            <Button variant="light" leftSection={<IconArrowBackUp size={16} />} onClick={handleNavigateUp}>
-                                Back
+                    <Group justify="space-between" h="100%">
+                        <Title order={1} size="h3">FoxPhoto</Title>
+                        <Group>
+                            {currentPath !== '/' && (
+                                <Button variant="light" leftSection={<IconArrowBackUp size={16} />} onClick={handleNavigateUp}>
+                                    Back
+                                </Button>
+                            )}
+                            <Button 
+                                variant="filled"
+                                leftSection={<IconHome size={16} />}
+                                onClick={() => setStartingPath(currentPath)}>
+                                Set Start Folder
+                            </Button>                        
+                            <Button
+                                variant="filled"
+                                leftSection={<IconPlayerPlay size={16} />}
+                                onClick={startSlideshow}
+                                disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
+                                Slideshow
+                            </Button>                        
+                            <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
+                                Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
                             </Button>
-                        )}
-                        <Button
-                            variant="filled"
-                            leftSection={<IconPlayerPlay size={16} />}
-                            onClick={startSlideshow}
-                            disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
-                            Slideshow
-                        </Button>                        
-                        <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
-                            Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
-                        </Button>
+                        </Group>
                     </Group>
-                </Group>
                 </AppShell.Header>
 
                 <AppShell.Navbar p="xs">
