@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Paper, 
+import { 
+    ActionIcon,
     Anchor, 
     AppShell, 
     Breadcrumbs, 
@@ -7,10 +8,11 @@ import { Paper,
     Flex, 
     Group, 
     LoadingOverlay, 
+    Paper, 
     TextInput,
     Title,
     useMantineColorScheme } from '@mantine/core';
-import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun } from '@tabler/icons-react';
+import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun, IconX } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import FileExplorer from './FileExplorer';
 import ThumbnailGrid from './ThumbnailGrid';
@@ -19,6 +21,7 @@ import Slideshow from './Slideshow';
 
 function App() {
     const { 
+        clearSearchTerm,
         currentPath, 
         getRootDirs, 
         images,
@@ -38,12 +41,25 @@ function App() {
     // Use Mantine's built-in color scheme hook
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
-        // Initial load for settings and then directories
+    const clearButton = searchTerm && (
+        <ActionIcon
+            variant="transparent"
+            onClick={clearSearchTerm}
+            aria-label="Clear search">
+            <IconX size={16} />
+        </ActionIcon>
+    );
+
+    const toggleIcon = colorScheme === 'dark' 
+        ? <IconSun size={16} /> 
+        : <IconMoon size={16} />;
+
+    /** Initial load for settings and then directories */
     useEffect(() => {
         loadSettings();
     }, [loadSettings]);
 
-    // Initial fetch for root directories on app load
+    /** Initial fetch for root directories on app load */
     useEffect(() => {
         if (startingPath) {
             readDirectory(startingPath);
@@ -66,8 +82,6 @@ function App() {
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
         readDirectory(parentPath || '/');
     };
-
-    const toggleIcon = colorScheme === 'dark' ? <IconSun size={16} /> : <IconMoon size={16} />;
 
     return (
         <>
@@ -102,6 +116,7 @@ function App() {
                                 value={searchTerm}
                                 onChange={(event) => setSearchTerm(event.currentTarget.value)}
                                 leftSection={<IconSearch size={16} />}
+                                rightSection={clearButton}
                             />                     
                             <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
                                 Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
@@ -129,12 +144,12 @@ function App() {
                             {/* Breadcrumbs */}
                             {currentPath && (
                                 <Breadcrumbs>
-                                <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
-                                {breadcrumbs.map((item, index) => (
-                                    <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
-                                        {item.title}
-                                    </Anchor>
-                                ))}
+                                    <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
+                                    {breadcrumbs.map((item, index) => (
+                                        <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
+                                            {item.title}
+                                        </Anchor>
+                                    ))}
                                 </Breadcrumbs>
                             )}
                             {/* Image Grid */}

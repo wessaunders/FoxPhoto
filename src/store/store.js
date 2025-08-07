@@ -24,6 +24,11 @@ const useFoxPhotoStore = create((set, get) => ({
     startingPath: null,
 
     // Actions
+    clearSearchTerm: () => {
+        set({ searchTerm: '' });
+        get().readDirectory(get().currentPath);
+    },
+    
     closeImage: () => {
         set({ selectedImage: null });
     },
@@ -103,13 +108,19 @@ const useFoxPhotoStore = create((set, get) => ({
             });
         } else {
             const { searchTerm } = get();
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+
             const filteredImages = searchTerm
-                ? result.images.filter(img => img.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                ? result.images.filter(img => img.name.toLowerCase().includes(lowerCaseSearchTerm))
                 : result.images;
+
+            const filteredDirectories = searchTerm
+                ? result.directories.filter(dir => dir.name.toLowerCase().includes(lowerCaseSearchTerm))
+                : result.directories;
 
             set({
                 currentPath: folderPath,
-                directories: result.directories,
+                directories: filteredDirectories,
                 images: filteredImages,
                 error: null,
             });
