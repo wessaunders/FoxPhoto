@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Modal, Image, Button, Group, Box, LoadingOverlay, Alert } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
-import useFoxPhotoStore from './store';
+import useFoxPhotoStore from './store/store';
 
 function FullImageView() {
     const { selectedImage, images, closeImage, nextImage, prevImage } = useFoxPhotoStore();

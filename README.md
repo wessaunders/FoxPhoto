@@ -95,11 +95,17 @@ foxphoto/
 │   ├── main.js             # Electron Main Process (backend operations)
 │   ├── preload.js          # Electron Preload Script (secure IPC bridge)
 └── src/
+    ├── hooks/
+    │   └── useImageDataLoader.js
+    ├── store/
+    │   └── store.js        # Zustand global state store
     ├── App.jsx             # Main React application component
-    ├── FileExplorer.jsx    # 
-    ├── FullImageView.jsx   # 
-    ├── store.js            # Zustand global state store
-    └── ThumbnailGrid.jsx   #
+    ├── FileExplorer.jsx    # File explorer component
+    ├── FullImageView.jsx   # Full image view component
+    ├── ImageThumbnail.jsx  # Thumbnail image component
+    ├── main.jsx            
+    ├── Slideshow.jsx       # Slideshow component
+    └── ThumbnailGrid.jsx   # Thumbnail grid component
 ```
 
 ## 🔒 Security Considerations
