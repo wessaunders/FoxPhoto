@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, Flex, Button, Text, Group } from '@mantine/core';
+import React, { useEffect, useRef } from 'react';
+import { Box, Button, Text, Group } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import SlideshowControls from './SlideshowControls';
@@ -17,19 +17,19 @@ const Slideshow = () => {
     } = useFoxPhotoStore();
     
     const timerRef = useRef(null);
-    const [currentImage, setCurrentImage] = useState(slideshowImages[slideshowIndex]);
-    const [prevImage, setPrevImage] = useState(null);
-    const [transitioning, setTransitioning] = useState(false);
 
     useEffect(() => {
+        // Clear any existing timer when the component re-renders or unmounts
         if (timerRef.current) {
             clearInterval(timerRef.current);
         }
         
+        // Set a new interval for the slideshow
         timerRef.current = setInterval(() => {
         nextSlide();
         }, slideshowDelay);
 
+        // Cleanup function to clear the interval when the component unmounts
         return () => {
         if (timerRef.current) {
             clearInterval(timerRef.current);
@@ -37,21 +37,7 @@ const Slideshow = () => {
         };
     }, [slideshowIndex, slideshowDelay, nextSlide, slideshowImages.length]);
 
-    useEffect(() => {
-        setTransitioning(true);
-        const newImage = slideshowImages[slideshowIndex];
-        
-        // Set a timeout to trigger the transition
-        const transitionTimeout = setTimeout(() => {
-        setPrevImage(currentImage);
-        setCurrentImage(newImage);
-        setTransitioning(false);
-        }, 500); // This should be half of the CSS transition duration
-
-        return () => clearTimeout(transitionTimeout);
-    }, [slideshowIndex]);
-
-
+    // Handle key presses for navigation
     useEffect(() => {
         const handleKeyPress = (e) => {
         if (e.key === 'ArrowRight') {
@@ -74,13 +60,8 @@ const Slideshow = () => {
         return null;
     }
 
-    const baseImageStyle = {
-        position: 'absolute',
-        maxWidth: '100%',
-        maxHeight: '100%',
-        objectFit: 'contain',
-        transition: 'all 1s ease-in-out',
-    };
+    const currentImage = slideshowImages[slideshowIndex];
+    const effectClassName = slideshowEffect === 'fade' ? 'fade-effect' : 'wipe-effect';
 
     return (
         <Box
@@ -99,22 +80,11 @@ const Slideshow = () => {
         }}
         >
         <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            {prevImage && (
-                <img
-                src={prevImage}
-                alt="Previous"
-                style={{ ...baseImageStyle, opacity: transitioning ? 0 : 1 }}
-                />
-            )}
             <img
-                src={currentImage}
-                alt="Current"
-                style={{ 
-                ...baseImageStyle, 
-                opacity: transitioning ? 0 : 1,
-                transform: slideshowEffect === 'wipe' && !transitioning ? 'translateX(0)' : 'translateX(100%)',
-                transition: 'transform 1s ease-out, opacity 1s ease-in',
-                }}
+            key={currentImage}
+            src={currentImage}
+            alt={`Slideshow image ${slideshowIndex + 1}`}
+            className={`slideshow-image ${effectClassName}`}
             />
         </Box>
 
