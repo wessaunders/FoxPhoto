@@ -11,19 +11,25 @@ import { Paper,
     LoadingOverlay, 
     Title,
     useMantineColorScheme } from '@mantine/core';
-import { IconArrowBackUp, IconSun, IconMoon } from '@tabler/icons-react';
-import useFoxPhotoStore from './store';
+import { IconArrowBackUp, IconPlayerPlay, IconPlayerPause, IconSun, IconMoon } from '@tabler/icons-react';
+import useFoxPhotoStore from './store/store';
 import FileExplorer from './FileExplorer';
 import ThumbnailGrid from './ThumbnailGrid';
 import FullImageView from './FullImageView';
+import Slideshow from './Slideshow';
 
 function App() {
     const { 
         currentPath, 
         getRootDirs, 
+        images,
+        isSlideshowActive,
         loadingState, 
         readDirectory, 
-        selectedImage
+        selectedImage,
+        selectedImagesForSlideshow,
+        startingPath,
+        startSlideshow
     } = useFoxPhotoStore();
 
     // Use Mantine's built-in color scheme hook
@@ -31,8 +37,12 @@ function App() {
 
     // Initial fetch for root directories on app load
     useEffect(() => {
-        getRootDirs();
-    }, [getRootDirs]);
+        if (startingPath) {
+            readDirectory(startingPath);
+        } else {
+            getRootDirs();
+        }
+    }, [getRootDirs, readDirectory, startingPath]);
 
     const pathParts = currentPath.split(/\/|\\/).filter(Boolean);
     const breadcrumbs = pathParts.map((part, index) => {
@@ -64,6 +74,13 @@ function App() {
                                 Back
                             </Button>
                         )}
+                        <Button
+                            variant="filled"
+                            leftSection={<IconPlayerPlay size={16} />}
+                            onClick={startSlideshow}
+                            disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
+                            Slideshow
+                        </Button>                        
                         <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
                             Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
                         </Button>
@@ -72,39 +89,40 @@ function App() {
                 </AppShell.Header>
 
                 <AppShell.Navbar p="xs">
-                <FileExplorer />
+                    <FileExplorer />
                 </AppShell.Navbar>
 
                 <AppShell.Main>
-                <Paper 
-                    p="md" 
-                    shadow="sm" 
-                    radius="md" 
-                    style={{ 
-                        position: 'relative', 
-                        minHeight: 'calc(100vh - 120px)'
-                    }}>
-                    <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                    <Paper 
+                        p="md" 
+                        shadow="sm" 
+                        radius="md" 
+                        style={{ 
+                            position: 'relative', 
+                            minHeight: 'calc(100vh - 120px)'
+                        }}>
+                        <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-                    <Flex direction="column" gap="md" h="100%">
-                        {/* Breadcrumbs */}
-                        {currentPath && (
-                            <Breadcrumbs>
-                            <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
-                            {breadcrumbs.map((item, index) => (
-                                <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
-                                {item.title}
-                                </Anchor>
-                            ))}
-                            </Breadcrumbs>
-                        )}
-                        {/* Image Grid */}
-                        <ThumbnailGrid />
-                    </Flex>
-                </Paper>
+                        <Flex direction="column" gap="md" h="100%">
+                            {/* Breadcrumbs */}
+                            {currentPath && (
+                                <Breadcrumbs>
+                                <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
+                                {breadcrumbs.map((item, index) => (
+                                    <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
+                                        {item.title}
+                                    </Anchor>
+                                ))}
+                                </Breadcrumbs>
+                            )}
+                            {/* Image Grid */}
+                            <ThumbnailGrid />
+                        </Flex>
+                    </Paper>
                 </AppShell.Main>
             </AppShell>
             {selectedImage && <FullImageView />}
+            {isSlideshowActive && <Slideshow />}
         </>
     );
 }

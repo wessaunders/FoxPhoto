@@ -1,95 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { SimpleGrid, Card, Image, Text, LoadingOverlay, Alert, Box, Skeleton } from '@mantine/core';
-import { IconPhotoOff } from '@tabler/icons-react';
-import useFoxPhotoStore from './store';
+import { useState, useEffect } from 'react';
+import { IconFileBroken } from '@tabler/icons-react';
+import { SimpleGrid, Card, Checkbox, Flex, Image, Text, LoadingOverlay, Alert, Box, Skeleton } from '@mantine/core';
+import ImageThumbnail from './ImageThumbnail';
+import useFoxPhotoStore from './store/store';
 
-// Custom hook to read and cache image data
-const useImageDataLoader = (imagePath) => {
-    const [dataUrl, setDataUrl] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        let isMounted = true;
-        const fetchImage = async () => {
-        try {
-            const url = await window.electronAPI.readImage(imagePath);
-            if (isMounted) {
-                setDataUrl(url);
-            }
-        } catch (error) {
-            console.error("Failed to load image:", imagePath, error);
-            if (isMounted) {
-                setDataUrl(null);
-            }
-        } finally {
-            if (isMounted) {
-                setIsLoading(false);
-            }
-        }
-        };
-        fetchImage();
-        return () => {
-            isMounted = false;
-        };
-    }, [imagePath]);
+const ThumbnailGrid = () => {
+    const { 
+        directories,
+        error,
+        images,
+        loadingState,
+        readDirectory,
+        selectImage,
+        selectedImagesForSlideshow, 
+        toggleImageForSlideshow
+    } = useFoxPhotoStore();
 
-    return { dataUrl, isLoading };
-};
+    const handleThumbnailClick = (image) => {
+        selectImage(image.path);
+    };
 
-function ThumbnailGrid() {
-    const { images, selectImage, loadingState, error } = useFoxPhotoStore();
+    const handleDirectoryClick = (directory) => {
+        readDirectory(directory.path);
+    };
 
     if (error) {
         return (
-        <Alert title="Error" color="red">
-            Failed to read directory: {error}
-        </Alert>
+            <Alert title="Error" color="red">
+                Failed to read directory: {error}
+            </Alert>
         );
     }
 
-    if (images.length === 0 && !loadingState.isScanning) {
-        return (
-        <Box p="md">
-            <Text c="dimmed">No images found in this folder.</Text>
-        </Box>
-        );
-    }
+    if (images.length === 0) {
+        if (!loadingState.isScanning) {
+            return (
+                <Box p="md">
+                    <Text c="dimmed">No images found in this folder.</Text>
+                </Box>
+            );
+        }
+
+        if (directories.length === 0) {
+            return (
+                <Flex direction="column" justify="center" align="center" style={{ minHeight: 'calc(100vh - 200px)' }}>
+                    <IconFileBroken size={48} color="var(--mantine-color-dimmed)" />
+                    <Text mt="md" c="dimmed">This folder is empty.</Text>
+                </Flex>
+            );
+        }
+    } 
+
+    const allItems = [
+        ...directories.map(dir => ({ ...dir, type: 'directory' })),
+        ...images.map(img => ({ ...img, type: 'image' }))
+    ];
 
     return (
         <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="md" style={{ position: 'relative' }}>
-        {images.map((image) => (
-            <ImageThumbnail key={image.path} image={image} selectImage={selectImage} />
-        ))}
+            {allItems.map((item) => (
+                <Box
+                    key={item.path}
+                    style={{
+                        position: 'relative',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        borderRadius: 'var(--mantine-radius-md)',
+                        boxShadow: 'var(--mantine-shadow-xs)',
+                    }}
+                >
+                    {item.type === 'image' && (
+                        <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                            onClick={() => handleThumbnailClick(item)}
+                        >
+                            <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
+                                <Image
+                                    src={item.path}
+                                    alt={item.name}
+                                    style={{ objectFit: 'cover', height: '100%', width: '100%' }}
+                                />
+                            </Box>
+                            <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
+                            <Checkbox
+                                checked={selectedImagesForSlideshow.includes(item.path)}
+                                onChange={() => toggleImageForSlideshow(item.path)}
+                                onClick={(e) => e.stopPropagation()} // Prevent parent click from firing
+                                style={{
+                                    position: 'absolute',
+                                    top: '0.5rem',
+                                    right: '0.5rem',
+                                    zIndex: 2,
+                                }}
+                            />
+                        </Flex>
+                    )}
+                    {item.type === 'directory' && (
+                        <Flex
+                            direction="column"
+                            align="center"
+                            justify="center"
+                            onClick={() => handleDirectoryClick(item)}
+                        >
+                            <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
+                                <Box
+                                    style={{
+                                        backgroundColor: 'var(--mantine-color-gray-2)',
+                                        height: '100%',
+                                        width: '100%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    <Text size="xl">📁</Text>
+                                </Box>
+                            </Box>
+                            <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
+                        </Flex>
+                    )}
+                </Box>
+            ))}
+
+            {/* {images.map((image) => (
+                <ImageThumbnail key={image.path} image={image} selectImage={selectImage} />
+            ))} */}
         </SimpleGrid>
     );
 }
-
-const ImageThumbnail = ({ image, selectImage }) => {
-    const { dataUrl, isLoading } = useImageDataLoader(image.path);
-
-    return (
-        <Card
-        shadow="sm"
-        p="xs"
-        radius="md"
-        withBorder
-        style={{ cursor: 'pointer', aspectRatio: '1 / 1' }}
-        onClick={() => selectImage(image.path)}
-        >
-        <Card.Section>
-            {isLoading ? (
-            <Skeleton height={150} />
-            ) : dataUrl ? (
-            <Image src={dataUrl} alt={image.name} height={150} fit="cover" />
-            ) : (
-            <Box h={150} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--mantine-color-dark-4)' }}>
-                <IconPhotoOff size={48} color="var(--mantine-color-dimmed)" />
-                <Text size="sm" c="dimmed" mt="xs">{image.name}</Text>
-            </Box>
-            )}
-        </Card.Section>
-        </Card>
-    );
-};
 
 export default ThumbnailGrid;
