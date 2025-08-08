@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { 
     ActionIcon,
     Anchor, 
@@ -13,11 +12,13 @@ import {
     Title,
     useMantineColorScheme } from '@mantine/core';
 import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun, IconX } from '@tabler/icons-react';
-import useFoxPhotoStore from './store/store';
+import { useEffect, useState } from 'react';
+import AdvancedSearchModal from './AdvancedSeachModal';
 import FileExplorer from './FileExplorer';
-import ThumbnailGrid from './ThumbnailGrid';
 import FullImageView from './FullImageView';
 import Slideshow from './Slideshow';
+import ThumbnailGrid from './ThumbnailGrid';
+import useFoxPhotoStore from './store/store';
 
 function App() {
     const { 
@@ -40,6 +41,8 @@ function App() {
 
     // Use Mantine's built-in color scheme hook
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
+    const [advancedSearchOpen, setAdvancedSearchOpen] = useState(false);
 
     const clearButton = searchTerm && (
         <ActionIcon
@@ -117,7 +120,12 @@ function App() {
                                 onChange={(event) => setSearchTerm(event.currentTarget.value)}
                                 leftSection={<IconSearch size={16} />}
                                 rightSection={clearButton}
-                            />                     
+                            />
+                            <Button
+                                variant="outline"
+                                onClick={() => setAdvancedSearchOpen(true)}>
+                                Advanced Search
+                            </Button>                     
                             <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
                                 Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
                             </Button>
@@ -158,6 +166,7 @@ function App() {
                     </Paper>
                 </AppShell.Main>
             </AppShell>
+            <AdvancedSearchModal opened={advancedSearchOpen} onClose={() => setAdvancedSearchOpen(false)} />
             {selectedImage && <FullImageView />}
             {isSlideshowActive && <Slideshow />}
         </>

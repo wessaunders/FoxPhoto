@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+const { imageSizeFromFile } = require('image-size/fromFile') 
 const fs = require('fs');
+const path = require('path');
+
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -46,6 +48,23 @@ app.on('window-all-closed', () => {
 
 // Main process IPC handlers
 const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+
+// Function to get image metadata
+const getImageMetadata = async (filePath) => {
+    const stats = fs.statSync(filePath);
+    let width = null, height = null;
+    try {
+        const dimensions = await imageSizeFromFile(filePath)
+        height = dimensions.height;
+        width = dimensions.width;
+    } 
+    catch { }
+    return {
+        mtime: stats.mtime,
+        width,
+        height,
+    };
+};
 
 // Function to get root drives on Windows/Linux or root directory on macOS
 const getRootDrives = () => {
@@ -98,16 +117,19 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
         const images = [];
 
         for (const file of files) {
-        const fullPath = path.join(folderPath, file.name);
-        if (file.isDirectory()) {
-            directories.push({ name: file.name, path: fullPath });
-        } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
-            images.push({ name: file.name, path: fullPath });
+            const fullPath = path.join(folderPath, file.name);
+            if (file.isDirectory()) {
+                directories.push({ name: file.name, path: fullPath });
+            } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+                const meta = await getImageMetadata(fullPath);
+                images.push({ name: file.name, path: fullPath, ...meta });
+            }
         }
-        }
+
         return { directories, images };
     } catch (error) {
         console.error(`Failed to read directory ${folderPath}:`, error);
+
         return { directories: [], images: [], error: error.message };
     }
 });
@@ -127,6 +149,7 @@ ipcMain.handle('read-image', async (event, imagePath) => {
 
 ipcMain.handle('save-settings', async (event, settings) => {
     const settingsPath = path.join(app.getPath('userData'), 'settings.json');
+
     try {
         await fs.promises.writeFile(settingsPath, JSON.stringify(settings, null, 2), 'utf-8');
         return { success: true };
