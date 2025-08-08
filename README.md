@@ -7,6 +7,7 @@ FoxPhoto is a desktop application built with Electron, React v19, and Zustand, d
 * **File System Navigation:** Easily browse your drives and folders.
 * **Thumbnail Grid:** View all images in a selected folder as a responsive grid of thumbnails.
 * **Full Image View:** Open images in a full-screen mode with navigation controls (next/previous).
+* **Advanced Search:** Search and order by name, date, and resolution
 * **Loading & Error Handling:** Visual feedback for loading states and graceful handling of errors.
 * **Modern UI:** Clean and intuitive user interface powered by Mantine UI.
 
@@ -89,24 +90,29 @@ To create distributable packages for your operating system (Windows, macOS, Linu
 
 ```
 foxphoto/
-├── index.html                  # Main HTML for the Electron renderer
-├── package.json                # Project metadata and dependencies
+├── index.html                          # Main HTML for the Electron renderer
+├── package.json                        # Project metadata and dependencies
 ├── electron/
-│   ├── main.js                 # Electron Main Process (backend operations)
-│   ├── preload.js              # Electron Preload Script (secure IPC bridge)
+│   ├── main.js                         # Electron Main Process (backend operations)
+│   ├── preload.js                      # Electron Preload Script (secure IPC bridge)
 └── src/
     ├── hooks/
     │   └── useImageDataLoader.js
     ├── store/
-    │   └── store.js            # Zustand global state store
-    ├── App.jsx                 # Main React application component
-    ├── FileExplorer.jsx        # File explorer component
-    ├── FullImageView.jsx       # Full image view component
-    ├── ImageThumbnail.jsx      # Thumbnail image component
+    │   ├── createDirectorySlice.jsx    # Zustand store slice containing directory functionality
+    │   ├── createSearchSlice.jsx       # Zustand store slice containing search functionality
+    │   ├── createSetingsSlice.jsx      # Zustand store slice containing persistent settings functionality
+    │   ├── createSlideshowSlice.jsx    # Zustand store slice containing slideshow functionality
+    │   └── store.js                    # Zustand global state store
+    ├── AdvancedSearchModal.jsx         # Advanced search modal component
+    ├── App.jsx                         # Main React application component
+    ├── FileExplorer.jsx                # File explorer component
+    ├── FullImageView.jsx               # Full image view component
+    ├── ImageThumbnail.jsx              # Thumbnail image component
     ├── main.jsx            
-    ├── Slideshow.jsx           # Slideshow component
-    ├── SlideshowControls.jsx   # Slideshow controls component
-    └── ThumbnailGrid.jsx       # Thumbnail grid component
+    ├── Slideshow.jsx                   # Slideshow component
+    ├── SlideshowControls.jsx           # Slideshow controls component
+    └── ThumbnailGrid.jsx               # Thumbnail grid component
 ```
 
 ## 🔒 Security Considerations
