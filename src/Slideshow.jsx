@@ -77,8 +77,19 @@ const Slideshow = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 overflow: 'hidden'
-            }}
-        >
+            }}>
+
+            <Box
+                style={{
+                    position: 'absolute',
+                    top: '1rem',
+                    left: '1rem',
+                    zIndex: 1100,
+                    pointerEvents: 'auto',
+                }}>
+                <SlideshowControls />
+            </Box>
+
             <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <img
                     key={currentImage}
@@ -88,48 +99,42 @@ const Slideshow = () => {
                 />
             </Box>
 
-            {/* Controls */}
             <Box
                 style={{
                 position: 'absolute',
                 top: '1rem',
                 right: '1rem',
-                }}
-            >
+                }}>
+                <Button onClick={stopSlideshow} size="lg" color="red" variant="subtle" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                    <IconX size={24} />
+                </Button>
+            </Box>
+
+            <Box
+                style={{
+                    position: 'absolute',
+                    bottom: '1rem',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                }}>
                 <Group>
-                    <SlideshowControls />
-                    <Button onClick={stopSlideshow} size="lg" color="red" variant="subtle" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                        <IconX size={24} />
+                    <Button onClick={previousSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                        <IconChevronLeft size={24} />
+                    </Button>
+                    <Button onClick={nextSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
+                        <IconChevronRight size={24} />
                     </Button>
                 </Group>
             </Box>
 
             <Box
                 style={{
-                position: 'absolute',
-                bottom: '1rem',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                }}
-            >
-                <Group>
-                <Button onClick={previousSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                    <IconChevronLeft size={24} />
-                </Button>
-                <Button onClick={nextSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
-                    <IconChevronRight size={24} />
-                </Button>
-                </Group>
-            </Box>
-
-            <Box
-                style={{
-                position: 'absolute',
-                bottom: '1rem',
-                right: '1rem',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                padding: '0.5rem 1rem',
-                borderRadius: '5px',
+                    position: 'absolute',
+                    bottom: '1rem',
+                    right: '1rem',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '5px',
                 }}
             >
                 <Text c="white" size="lg">

@@ -1,5 +1,6 @@
-import { Box, Flex, Group, SegmentedControl, Slider, Text, Card, Tooltip } from '@mantine/core';
+import { Box, Flex, Group, SegmentedControl, Slider, Stack, Text, Card, Tooltip } from '@mantine/core';
 import { IconClock } from '@tabler/icons-react';
+import { useState } from 'react';
 import useFoxPhotoStore from './store/store';
 
 const SlideshowControls = () => {
@@ -9,10 +10,22 @@ const SlideshowControls = () => {
         slideshowEffect,
         setSlideshowEffect,
     } = useFoxPhotoStore();
+    const [hovered, setHovered] = useState(false);
 
     return (
-        <Card withBorder radius="md" p="md" shadow="sm" style={{ backgroundColor: 'var(--mantine-color-body)' }}>
-            <Group grow mb="md" bg="var(--mantine-color-body)">
+        <Card 
+            withBorder 
+            radius="md" 
+            p="md" 
+            shadow="sm" 
+            style={{ 
+                backgroundColor: 'var(--mantine-color-body)',
+                opacity: hovered ? 1 : 0.15,
+                transition: 'opacity 0.3s',
+            }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}>
+            <Stack grow mb="md" bg="var(--mantine-color-body)">
                 <Box>
                     <Flex direction="row" gap="sm">
                         <IconClock size={16} />
@@ -29,7 +42,7 @@ const SlideshowControls = () => {
                         />
                     </Tooltip>
                 </Box>
-                <Box w="12em">
+                <Box w="10em">
                     <Text size="sm" mb="xs" ta="center">Effect</Text>
                     <SegmentedControl
                         value={slideshowEffect}
@@ -41,7 +54,7 @@ const SlideshowControls = () => {
                         fullWidth
                     />
                 </Box>
-            </Group>
+            </Stack>
         </Card>
     );
 };
