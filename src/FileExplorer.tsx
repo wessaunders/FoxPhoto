@@ -21,12 +21,17 @@ function FileExplorer() {
                 return (
                     <NavLink
                         key={dir.path}
-                        label={isRoot ? dir.path : dir.name}
-                        leftSection={isRoot ? <IconDisc size={16} /> : <IconFolder size={16} />}
+                        label={isRoot 
+                            ? dir.path 
+                            : dir.name
+                        }
+                        leftSection={isRoot 
+                            ? <IconDisc size={16} /> 
+                            : <IconFolder size={16} />
+                        }
                         active={dir.path === currentPath}
                         onClick={() => readDirectory(dir.path)}
                         variant="subtle"
-                        radius="md"
                     />
                 );
             })}

@@ -104,15 +104,16 @@ foxphoto/
     │   ├── createSetingsSlice.jsx      # Zustand store slice containing persistent settings functionality
     │   ├── createSlideshowSlice.jsx    # Zustand store slice containing slideshow functionality
     │   └── store.js                    # Zustand global state store
-    ├── AdvancedSearchModal.jsx         # Advanced search modal component
-    ├── App.jsx                         # Main React application component
-    ├── FileExplorer.jsx                # File explorer component
-    ├── FullImageView.jsx               # Full image view component
-    ├── ImageThumbnail.jsx              # Thumbnail image component
-    ├── main.jsx            
-    ├── Slideshow.jsx                   # Slideshow component
-    ├── SlideshowControls.jsx           # Slideshow controls component
-    └── ThumbnailGrid.jsx               # Thumbnail grid component
+    ├── AdvancedSearchModal.tsx         # Advanced search modal component
+    ├── AppHeader.tsx                   # Main React application header component
+    ├── App.tsx                         # Main React application component
+    ├── FileExplorer.tsx                # File explorer component
+    ├── FullImageView.tsx               # Full image view component
+    ├── ImageThumbnail.tsx              # Thumbnail image component
+    ├── main.tsx            
+    ├── Slideshow.tsx                   # Slideshow component
+    ├── SlideshowControls.tsx           # Slideshow controls component
+    └── ThumbnailGrid.tsx               # Thumbnail grid component
 ```
 
 ## 🔒 Security Considerations
