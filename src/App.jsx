@@ -14,6 +14,7 @@ import {
 import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun, IconX } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import AdvancedSearchModal from './AdvancedSeachModal';
+import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
 import Slideshow from './Slideshow';
@@ -43,6 +44,7 @@ function App() {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
     const [advancedSearchOpen, setAdvancedSearchOpen] = useState(false);
+    const [navbarOpen, setNavbarOpen] = useState(true);
 
     const clearButton = searchTerm && (
         <ActionIcon
@@ -77,60 +79,23 @@ function App() {
         return { title: part, href: path };
     });
 
-    const handleNavigateUp = () => {
-        if (currentPath === '/') {
-            return;
-        }
-        
-        const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-        readDirectory(parentPath || '/');
-    };
-
     return (
         <>
             <AppShell
                 header={{ height: 60 }}
-                navbar={{ width: 300, breakpoint: 'sm' }}
+                navbar={{ 
+                    width: 300, 
+                    breakpoint: 'sm', 
+                    collapsed: {
+                        desktop: navbarOpen 
+                    }
+                }}
                 padding="md">
                 <AppShell.Header p="xs" style={{ borderBottom: 'none' }}>
-                    <Group justify="space-between" h="100%">
-                        <Title order={1} size="h3">FoxPhoto</Title>
-                        <Group>
-                            {currentPath !== '/' && (
-                                <Button variant="light" leftSection={<IconArrowBackUp size={16} />} onClick={handleNavigateUp}>
-                                    Back
-                                </Button>
-                            )}
-                            <Button 
-                                variant="filled"
-                                leftSection={<IconHome size={16} />}
-                                onClick={() => setStartingPath(currentPath)}>
-                                Set Start Folder
-                            </Button>                        
-                            <Button
-                                variant="filled"
-                                leftSection={<IconPlayerPlay size={16} />}
-                                onClick={startSlideshow}
-                                disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
-                                Slideshow
-                            </Button>   
-                            <TextInput
-                                placeholder="Search images"
-                                value={searchTerm}
-                                onChange={(event) => setSearchTerm(event.currentTarget.value)}
-                                leftSection={<IconSearch size={16} />}
-                                rightSection={clearButton}
-                            />
-                            <Button
-                                variant="outline"
-                                onClick={() => setAdvancedSearchOpen(true)}>
-                                Advanced Search
-                            </Button>                     
-                            <Button variant="subtle" onClick={toggleColorScheme} leftSection={toggleIcon}>
-                                Toggle {colorScheme === 'dark' ? 'Light' : 'Dark'} Mode
-                            </Button>
-                        </Group>
-                    </Group>
+                    <AppHeader 
+                        isNavbarOpen={navbarOpen}
+                        onOpenAdvancedSearch={() => setAdvancedSearchOpen(true)}
+                        onToggleNavbar={() => setNavbarOpen((open) => !open)} />
                 </AppShell.Header>
 
                 <AppShell.Navbar p="xs">
@@ -149,7 +114,6 @@ function App() {
                         <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
                         <Flex direction="column" gap="md" h="100%">
-                            {/* Breadcrumbs */}
                             {currentPath && (
                                 <Breadcrumbs>
                                     <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
@@ -160,12 +124,13 @@ function App() {
                                     ))}
                                 </Breadcrumbs>
                             )}
-                            {/* Image Grid */}
+
                             <ThumbnailGrid />
                         </Flex>
                     </Paper>
                 </AppShell.Main>
             </AppShell>
+
             <AdvancedSearchModal opened={advancedSearchOpen} onClose={() => setAdvancedSearchOpen(false)} />
             {selectedImage && <FullImageView />}
             {isSlideshowActive && <Slideshow />}
