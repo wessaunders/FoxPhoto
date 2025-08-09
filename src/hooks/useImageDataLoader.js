@@ -29,3 +29,5 @@ const useImageDataLoader = (imagePath) => {
 
     return { dataUrl, isLoading };
 };
+
+export default useImageDataLoader;

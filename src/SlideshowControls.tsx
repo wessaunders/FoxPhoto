@@ -1,4 +1,4 @@
-import { Box, Flex, Group, SegmentedControl, Slider, Stack, Text, Card, Tooltip } from '@mantine/core';
+import { Box, Flex, SegmentedControl, Slider, Stack, Text, Card, Tooltip } from '@mantine/core';
 import { IconClock } from '@tabler/icons-react';
 import { useState } from 'react';
 import useFoxPhotoStore from './store/store';
@@ -25,11 +25,11 @@ const SlideshowControls = () => {
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}>
-            <Stack grow mb="md" bg="var(--mantine-color-body)">
+            <Stack mb="md" bg="var(--mantine-color-body)">
                 <Box>
                     <Flex direction="row" gap="sm">
                         <IconClock size={16} />
-                        <Text size="sm" mb="xs" ta="center" left>Delay</Text>
+                        <Text size="sm" mb="xs" ta="center">Delay</Text>
                     </Flex>
                     <Tooltip label={`${slideshowDelay / 1000} seconds`}>
                         <Slider

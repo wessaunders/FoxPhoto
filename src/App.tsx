@@ -1,17 +1,11 @@
 import { 
-    ActionIcon,
     Anchor, 
     AppShell, 
     Breadcrumbs, 
-    Button, 
     Flex, 
-    Group, 
     LoadingOverlay, 
-    Paper, 
-    TextInput,
-    Title,
-    useMantineColorScheme } from '@mantine/core';
-import { IconArrowBackUp, IconHome, IconMoon, IconPlayerPlay, IconSearch, IconSun, IconX } from '@tabler/icons-react';
+    Paper
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import AdvancedSearchModal from './AdvancedSeachModal';
 import AppHeader from './AppHeader';
@@ -21,43 +15,25 @@ import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
 
-function App() {
+interface BreadcrumbItem {
+    title: string;
+    href: string;
+}
+
+const App = () => {
     const { 
-        clearSearchTerm,
         currentPath, 
         getRootDirs, 
-        images,
         isSlideshowActive,
         loadSettings,
         loadingState, 
         readDirectory, 
-        searchTerm,
         selectedImage,
-        selectedImagesForSlideshow,
-        setSearchTerm,
-        setStartingPath,
         startingPath,
-        startSlideshow
     } = useFoxPhotoStore();
 
-    // Use Mantine's built-in color scheme hook
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
     const [advancedSearchOpen, setAdvancedSearchOpen] = useState(false);
-    const [navbarOpen, setNavbarOpen] = useState(true);
-
-    const clearButton = searchTerm && (
-        <ActionIcon
-            variant="transparent"
-            onClick={clearSearchTerm}
-            aria-label="Clear search">
-            <IconX size={16} />
-        </ActionIcon>
-    );
-
-    const toggleIcon = colorScheme === 'dark' 
-        ? <IconSun size={16} /> 
-        : <IconMoon size={16} />;
+    const [navbarClosed, setNavbarClosed] = useState(false);
 
     /** Initial load for settings and then directories */
     useEffect(() => {
@@ -74,7 +50,7 @@ function App() {
     }, [getRootDirs, readDirectory, startingPath]);
 
     const pathParts = currentPath.split(/\/|\\/).filter(Boolean);
-    const breadcrumbs = pathParts.map((part, index) => {
+    const breadcrumbs: BreadcrumbItem[] = pathParts.map((part, index) => {
         const path = pathParts.slice(0, index + 1).join('/');
         return { title: part, href: path };
     });
@@ -87,15 +63,15 @@ function App() {
                     width: 300, 
                     breakpoint: 'sm', 
                     collapsed: {
-                        desktop: navbarOpen 
+                        desktop: navbarClosed 
                     }
                 }}
                 padding="md">
                 <AppShell.Header p="xs" style={{ borderBottom: 'none' }}>
                     <AppHeader 
-                        isNavbarOpen={navbarOpen}
+                        isNavbarClosed={navbarClosed}
                         onOpenAdvancedSearch={() => setAdvancedSearchOpen(true)}
-                        onToggleNavbar={() => setNavbarOpen((open) => !open)} />
+                        onToggleNavbar={() => setNavbarClosed((open) => !open)} />
                 </AppShell.Header>
 
                 <AppShell.Navbar p="xs">

@@ -2,6 +2,11 @@ import { NavLink, Flex, Text, Paper, ScrollArea } from '@mantine/core';
 import { IconFolder, IconDisc } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 
+interface Directory {
+    name: string;
+    path: string;
+}
+
 function FileExplorer() {
     const { directories, readDirectory, currentPath, rootDirs } = useFoxPhotoStore();
 
@@ -11,7 +16,7 @@ function FileExplorer() {
             {directories.length === 0 && (
                 <Text p="xs" c="dimmed">No sub-folders found.</Text>
             )}
-            {directories.map((dir) => {
+            {directories.map((dir: Directory) => {
                 const isRoot = rootDirs.includes(dir.path);
                 return (
                     <NavLink
