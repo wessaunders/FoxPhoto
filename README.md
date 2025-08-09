@@ -99,10 +99,10 @@ foxphoto/
     ├── hooks/
     │   └── useImageDataLoader.js
     ├── store/
-    │   ├── createDirectorySlice.jsx    # Zustand store slice containing directory functionality
-    │   ├── createSearchSlice.jsx       # Zustand store slice containing search functionality
-    │   ├── createSetingsSlice.jsx      # Zustand store slice containing persistent settings functionality
-    │   ├── createSlideshowSlice.jsx    # Zustand store slice containing slideshow functionality
+    │   ├── createDirectorySlice.js    # Zustand store slice containing directory functionality
+    │   ├── createSearchSlice.ts       # Zustand store slice containing search functionality
+    │   ├── createSetingsSlice.js      # Zustand store slice containing persistent settings functionality
+    │   ├── createSlideshowSlice.ts    # Zustand store slice containing slideshow functionality
     │   └── store.js                    # Zustand global state store
     ├── AdvancedSearchModal.tsx         # Advanced search modal component
     ├── AppFooter.tsx                   # Main React application footer component

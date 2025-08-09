@@ -1,12 +1,7 @@
 import { Card, Image, Text, Box, Skeleton } from '@mantine/core';
 import { IconPhotoOff } from '@tabler/icons-react';
 import useImageDataLoader from './hooks/useImageDataLoader';
-
-interface ImageType {
-    name: string;
-    path: string;
-    [key: string]: any;
-}
+import { ImageType } from './interfaces/ui';
 
 interface ImageThumbnailProps {
     image: ImageType;

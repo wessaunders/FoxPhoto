@@ -6,6 +6,7 @@ import {
     LoadingOverlay, 
     Paper
 } from '@mantine/core';
+import { BreadcrumbItem } from './interfaces/ui'; 
 import { useEffect, useState } from 'react';
 import AdvancedSearchModal from './AdvancedSeachModal';
 import AppFooter from './AppFooter';
@@ -15,11 +16,6 @@ import FullImageView from './FullImageView';
 import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
-
-interface BreadcrumbItem {
-    title: string;
-    href: string;
-}
 
 const App = () => {
     const { 

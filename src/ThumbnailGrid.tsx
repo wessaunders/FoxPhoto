@@ -1,20 +1,9 @@
-import { useState, useEffect } from 'react';
+import { DirectoryType, ImageType } from './interfaces/ui'; 
 import { IconFileBroken } from '@tabler/icons-react';
 import { SimpleGrid, Card, Checkbox, Flex, Image, Text, LoadingOverlay, Alert, Box, Skeleton } from '@mantine/core';
+import { useState, useEffect } from 'react';
 import ImageThumbnail from './ImageThumbnail';
 import useFoxPhotoStore from './store/store';
-
-interface DirectoryType {
-    name: string;
-    path: string;
-    [key: string]: any;
-}
-
-interface ImageType {
-    name: string;
-    path: string;
-    [key: string]: any;
-}
 
 type Item = (DirectoryType | ImageType) & { type: 'directory' | 'image' };
 

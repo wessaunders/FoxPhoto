@@ -1,11 +1,8 @@
+import { Directory } from './interfaces/ui'; 
 import { NavLink, Flex, Text, Paper, ScrollArea } from '@mantine/core';
 import { IconFolder, IconDisc } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 
-interface Directory {
-    name: string;
-    path: string;
-}
 
 function FileExplorer() {
     const { directories, readDirectory, currentPath, rootDirs } = useFoxPhotoStore();

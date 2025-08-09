@@ -51,7 +51,7 @@ export const createDirectorySlice = (set, get) => ({
         });
 
         const isWindows = navigator.platform.startsWith('Win');
-        let result = undefined;
+        let result = {};
         if (isWindows && (folderPath === '/' || folderPath === '')) {
             const rootDirs = get().rootDirs;
 
@@ -110,8 +110,8 @@ export const createDirectorySlice = (set, get) => ({
                 case 'date':
                     filteredImages = filteredImages.sort((a, b) =>
                         advancedSearch.sortOrder === 'asc'
-                            ? new Date(a.mtime) - new Date(b.mtime)
-                            : new Date(b.mtime) - new Date(a.mtime)
+                            ? new Date(a.mtime).getTime() - new Date(b.mtime).getTime()
+                            : new Date(b.mtime).getTime() - new Date(a.mtime).getTime()
                     );
                 case 'resolution':
                     filteredImages = filteredImages.sort((a, b) =>
@@ -141,5 +141,7 @@ export const createDirectorySlice = (set, get) => ({
             } 
         });
     },
-    selectImage: (imagePath) => set({ selectedImage: imagePath }),
+    selectImage: (imagePath) => {
+        set({ selectedImage: imagePath });
+    }
 });

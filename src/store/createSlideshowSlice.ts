@@ -1,4 +1,16 @@
-export const createSlideshowSlice = (set, get) => ({
+interface SlideshowSlice {
+    isSlideshowActive: boolean;
+    slideshowImages: string[];
+    slideshowIndex: number;
+    selectedImagesForSlideshow: string[];
+    nextSlide: () => void;
+    previousSlide: () => void;
+    startSlideshow: () => void;
+    stopSlideshow: () => void;
+    toggleImageForSlideshow: (imagePath: string) => void;
+}
+
+export const createSlideshowSlice = (set, get): SlideshowSlice => ({
     isSlideshowActive: false,
     slideshowImages: [],
     slideshowIndex: 0,
@@ -33,7 +45,7 @@ export const createSlideshowSlice = (set, get) => ({
             slideshowIndex: 0
         });
     },
-    toggleImageForSlideshow: (imagePath) => {
+    toggleImageForSlideshow: (imagePath: string) => {
         set(state => {
             const isSelected = state.selectedImagesForSlideshow.includes(imagePath);
             const selectedImages = isSelected
