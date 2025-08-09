@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { imageSizeFromFile } = require('image-size/fromFile') 
+const exifr = require('exifr');
 const fs = require('fs');
 const path = require('path');
 
@@ -121,8 +122,9 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
             if (file.isDirectory()) {
                 directories.push({ name: file.name, path: fullPath });
             } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+                const exif = await exifr.parse(fullPath);
                 const meta = await getImageMetadata(fullPath);
-                images.push({ name: file.name, path: fullPath, ...meta });
+                images.push({ name: file.name, path: fullPath, ...meta, ...exif });
             }
         }
 
