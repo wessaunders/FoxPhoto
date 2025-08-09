@@ -105,6 +105,7 @@ foxphoto/
     │   ├── createSlideshowSlice.jsx    # Zustand store slice containing slideshow functionality
     │   └── store.js                    # Zustand global state store
     ├── AdvancedSearchModal.tsx         # Advanced search modal component
+    ├── AppFooter.tsx                   # Main React application footer component
     ├── AppHeader.tsx                   # Main React application header component
     ├── App.tsx                         # Main React application component
     ├── FileExplorer.tsx                # File explorer component

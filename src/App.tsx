@@ -8,6 +8,7 @@ import {
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import AdvancedSearchModal from './AdvancedSeachModal';
+import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
@@ -58,6 +59,7 @@ const App = () => {
     return (
         <>
             <AppShell
+                footer={{ height: 60 }}
                 header={{ height: 60 }}
                 navbar={{ 
                     width: 300, 
@@ -67,7 +69,7 @@ const App = () => {
                     }
                 }}
                 padding="md">
-                <AppShell.Header p="xs" style={{ borderBottom: 'none' }}>
+                <AppShell.Header p="xs">
                     <AppHeader 
                         isNavbarClosed={navbarClosed}
                         onOpenAdvancedSearch={() => setAdvancedSearchOpen(true)}
@@ -105,6 +107,9 @@ const App = () => {
                         </Flex>
                     </Paper>
                 </AppShell.Main>
+                <AppShell.Footer p="xs">
+                    <AppFooter />
+                </AppShell.Footer>
             </AppShell>
 
             <AdvancedSearchModal opened={advancedSearchOpen} onClose={() => setAdvancedSearchOpen(false)} />
