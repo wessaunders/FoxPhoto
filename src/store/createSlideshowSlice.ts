@@ -1,4 +1,4 @@
-interface SlideshowSlice {
+export interface SlideshowSlice {
     isSlideshowActive: boolean;
     slideshowImages: string[];
     slideshowIndex: number;

@@ -97,13 +97,13 @@ foxphoto/
 │   ├── preload.js                      # Electron Preload Script (secure IPC bridge)
 └── src/
     ├── hooks/
-    │   └── useImageDataLoader.js
+    │   └── useImageDataLoader.ts
     ├── store/
-    │   ├── createDirectorySlice.js    # Zustand store slice containing directory functionality
+    │   ├── createDirectorySlice.ts    # Zustand store slice containing directory functionality
     │   ├── createSearchSlice.ts       # Zustand store slice containing search functionality
-    │   ├── createSetingsSlice.js      # Zustand store slice containing persistent settings functionality
+    │   ├── createSetingsSlice.ts      # Zustand store slice containing persistent settings functionality
     │   ├── createSlideshowSlice.ts    # Zustand store slice containing slideshow functionality
-    │   └── store.js                    # Zustand global state store
+    │   └── store.ts                    # Zustand global state store
     ├── AdvancedSearchModal.tsx         # Advanced search modal component
     ├── AppFooter.tsx                   # Main React application footer component
     ├── AppHeader.tsx                   # Main React application header component

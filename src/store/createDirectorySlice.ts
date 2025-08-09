@@ -1,7 +1,22 @@
-// Preload script exposes electronAPI on the window object
-const electronAPI = window.electronAPI;
+import { Directory, ImageType, LoadingState } from '../interfaces/ui';
 
-export const createDirectorySlice = (set, get) => ({
+export interface DirectorySlice {
+    currentPath: string;
+    directories: Directory[];
+    error: string | null;
+    images: ImageType[];
+    loadingState: LoadingState;
+    rootDirs: string[];
+    selectedImage: string | null;
+    closeImage: () => void;
+    getRootDirs: () => Promise<void>;
+    nextImage: () => void;
+    prevImage: () => void;
+    readDirectory: (folderPath: string) => Promise<void>;
+    selectImage: (imagePath: string) => void;
+}
+
+export const createDirectorySlice = (set, get): DirectorySlice => ({
     currentPath: '',
     directories: [],
     error: null,
@@ -16,7 +31,7 @@ export const createDirectorySlice = (set, get) => ({
     getRootDirs: async () => {
         set({ loadingState: { isScanning: true, isLoadingImage: false } });
 
-        const rootDirs = await electronAPI.getRootDirs();
+        const rootDirs = await window.electronAPI.getRootDirs();
 
         set({
             rootDirs: rootDirs,
@@ -51,7 +66,7 @@ export const createDirectorySlice = (set, get) => ({
         });
 
         const isWindows = navigator.platform.startsWith('Win');
-        let result = {};
+        let result: any = undefined;
         if (isWindows && (folderPath === '/' || folderPath === '')) {
             const rootDirs = get().rootDirs;
 
@@ -61,7 +76,7 @@ export const createDirectorySlice = (set, get) => ({
                 error: null
             }
         } else {
-            result = await electronAPI.readDirectory(folderPath);
+            result = await window.electronAPI.readDirectory(folderPath);
         }
 
         if (result.error) {

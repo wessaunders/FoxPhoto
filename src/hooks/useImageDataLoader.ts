@@ -1,9 +1,12 @@
+import { useState, useEffect } from 'react'; 
+
 const useImageDataLoader = (imagePath) => {
-    const [dataUrl, setDataUrl] = useState(null);
+    const [dataUrl, setDataUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         let isMounted = true;
+
         const fetchImage = async () => {
             try {
                 const url = await window.electronAPI.readImage(imagePath);
@@ -21,7 +24,9 @@ const useImageDataLoader = (imagePath) => {
                 }
             }
         };
+
         fetchImage();
+        
         return () => {
             isMounted = false;
         };

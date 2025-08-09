@@ -8,7 +8,7 @@ interface AdvancedSearchOptions {
     };
 }
 
-interface SearchSlice {
+export interface SearchSlice {
     advancedSearch: AdvancedSearchOptions;
     searchTerm: string;
     clearSearchTerm: () => void;

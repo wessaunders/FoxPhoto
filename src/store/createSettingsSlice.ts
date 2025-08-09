@@ -1,12 +1,20 @@
-// Preload script exposes electronAPI on the window object
-const electronAPI = window.electronAPI;
+export interface SettingsSlice {
+    startingPath: string | null;
+    slideshowDelay: number;
+    slideshowEffect: string;
+    loadSettings: () => Promise<void>;
+    saveSettings: () => Promise<void>;
+    setSlideshowDelay: (delay: number) => void;
+    setSlideshowEffect: (effect: string) => void;
+    setStartingPath: (path: string) => void;
+}
 
-export const createSettingsSlice = (set, get) => ({
+export const createSettingsSlice = (set, get): SettingsSlice => ({
     startingPath: null,
     slideshowDelay: 3000,
     slideshowEffect: 'fade',
     loadSettings: async () => {
-        const settings = await electronAPI.loadSettings();
+        const settings = await window.electronAPI.loadSettings();
         if (settings) {
             set({
                 startingPath: settings.startingPath,
@@ -18,7 +26,7 @@ export const createSettingsSlice = (set, get) => ({
     saveSettings: async () => {
         const { startingPath, slideshowDelay, slideshowEffect } = get();
         const settings = { startingPath, slideshowDelay, slideshowEffect };
-        await electronAPI.saveSettings(settings);
+        await window.electronAPI.saveSettings(settings);
     },
     setSlideshowDelay: (delay) => {
         set({ slideshowDelay: delay });
