@@ -3,7 +3,7 @@ import { Modal, Image, Button, Group, Box, LoadingOverlay, Alert } from '@mantin
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 
-function FullImageView() {
+const FullImageView = () => {
     const { selectedImage, images, closeImage, nextImage, prevImage } = useFoxPhotoStore();
     const [imageDataUrl, setImageDataUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

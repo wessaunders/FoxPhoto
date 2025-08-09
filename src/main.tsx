@@ -12,7 +12,12 @@ const theme = createTheme({
     }  
 });
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+    throw new Error('Root element not found');
+}
+
+ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
         <MantineProvider theme={theme} defaultColorScheme="dark">
             <App />

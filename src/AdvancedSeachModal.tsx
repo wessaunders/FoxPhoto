@@ -21,8 +21,18 @@ const ORDER_OPTIONS = [
     { value: 'desc', label: 'Descending' },
 ];
 
-function AdvancedSearchModal({ opened, onClose }) {
-    const { advancedSearch, setAdvancedSearch, readDirectory, currentPath } = useFoxPhotoStore();
+interface AdvancedSearchModalProps {
+    opened: boolean;
+    onClose: () => void;
+}
+
+const AdvancedSearchModal = (props: AdvancedSearchModalProps) => {
+    const { opened, onClose } = props;
+    const { 
+        advancedSearch, 
+        setAdvancedSearch, 
+        readDirectory, 
+        currentPath } = useFoxPhotoStore();
 
     const handleApply = () => {
         readDirectory(currentPath);

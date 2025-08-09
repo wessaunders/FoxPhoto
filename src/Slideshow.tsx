@@ -16,7 +16,7 @@ const Slideshow = () => {
         stopSlideshow 
     } = useFoxPhotoStore();
     
-    const timerRef = useRef(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         // Clear any existing timer when the component re-renders or unmounts

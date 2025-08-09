@@ -7,12 +7,19 @@ import {
     TextInput,
     ThemeIcon,
     Title,
+    useMantineColorScheme
 } from '@mantine/core';
 import { IconArrowBackUp, IconHome, IconPlayerPlay, IconFilterSearch, IconSearch, IconMoon, IconSun, IconX } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
-import { useMantineColorScheme } from '@mantine/core';
 
-function AppHeader({ isNavbarOpen, onToggleNavbar, onOpenAdvancedSearch }) {
+interface AppHeaderProps {
+    isNavbarClosed: boolean;
+    onToggleNavbar: () => void;
+    onOpenAdvancedSearch: () => void;
+}
+
+const AppHeader = (props: AppHeaderProps) => {
+    const { isNavbarClosed, onToggleNavbar, onOpenAdvancedSearch } = props;
     const {
         clearSearchTerm,
         currentPath,
@@ -46,13 +53,13 @@ function AppHeader({ isNavbarOpen, onToggleNavbar, onOpenAdvancedSearch }) {
     return (
         <Group justify="space-between" h="100%">
             <Group justify="space-evenly">
+                <Burger
+                    opened={isNavbarClosed}
+                    aria-label="Toggle File Explorer"
+                    onClick={onToggleNavbar}>
+                </Burger>
                 <Title order={1} size="h3">FoxPhoto</Title>
                 <Group>
-                    <Burger
-                        opened={isNavbarOpen}
-                        aria-label="Toggle File Explorer"
-                        onClick={onToggleNavbar}>
-                    </Burger>
                     <ActionIcon
                         variant="filled"
                         onClick={() => setStartingPath(currentPath)}>

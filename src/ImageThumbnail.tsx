@@ -1,9 +1,20 @@
-import { useState, useEffect } from 'react';
-import { SimpleGrid, Card, Image, Text, LoadingOverlay, Alert, Box, Skeleton } from '@mantine/core';
+import { Card, Image, Text, Box, Skeleton } from '@mantine/core';
 import { IconPhotoOff } from '@tabler/icons-react';
-import useFoxPhotoStore from './store/store';
+import useImageDataLoader from './hooks/useImageDataLoader';
 
-const ImageThumbnail = ({ image, selectImage }) => {
+interface ImageType {
+    name: string;
+    path: string;
+    [key: string]: any;
+}
+
+interface ImageThumbnailProps {
+    image: ImageType;
+    selectImage: (path: string) => void;
+}
+
+const ImageThumbnail = (props: ImageThumbnailProps) => {
+    const { image, selectImage } = props;
     const { dataUrl, isLoading } = useImageDataLoader(image.path);
 
     return (

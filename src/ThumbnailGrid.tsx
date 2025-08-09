@@ -4,6 +4,19 @@ import { SimpleGrid, Card, Checkbox, Flex, Image, Text, LoadingOverlay, Alert, B
 import ImageThumbnail from './ImageThumbnail';
 import useFoxPhotoStore from './store/store';
 
+interface DirectoryType {
+    name: string;
+    path: string;
+    [key: string]: any;
+}
+
+interface ImageType {
+    name: string;
+    path: string;
+    [key: string]: any;
+}
+
+type Item = (DirectoryType | ImageType) & { type: 'directory' | 'image' };
 
 const ThumbnailGrid = () => {
     const { 
@@ -17,11 +30,11 @@ const ThumbnailGrid = () => {
         toggleImageForSlideshow
     } = useFoxPhotoStore();
 
-    const handleThumbnailClick = (image) => {
+    const handleThumbnailClick = (image: ImageType) => {
         selectImage(image.path);
     };
 
-    const handleDirectoryClick = (directory) => {
+    const handleDirectoryClick = (directory: DirectoryType) => {
         readDirectory(directory.path);
     };
 
@@ -52,7 +65,7 @@ const ThumbnailGrid = () => {
         }
     } 
 
-    const allItems = [
+    const allItems: Item[] = [
         ...directories.map(dir => ({ ...dir, type: 'directory' })),
         ...images.map(img => ({ ...img, type: 'image' }))
     ];
