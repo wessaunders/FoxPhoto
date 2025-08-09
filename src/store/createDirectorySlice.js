@@ -50,7 +50,19 @@ export const createDirectorySlice = (set, get) => ({
             error: null 
         });
 
-        const result = await electronAPI.readDirectory(folderPath);
+        const isWindows = navigator.platform.startsWith('Win');
+        let result = undefined;
+        if (isWindows && (folderPath === '/' || folderPath === '')) {
+            const rootDirs = get().rootDirs;
+
+            result = {
+                directories: rootDirs.map(d => ({ name: d, path: d })),
+                images: [],
+                error: null
+            }
+        } else {
+            result = await electronAPI.readDirectory(folderPath);
+        }
 
         if (result.error) {
             set({ 

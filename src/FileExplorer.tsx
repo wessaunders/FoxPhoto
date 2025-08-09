@@ -12,30 +12,30 @@ function FileExplorer() {
 
     return (
         <Paper shadow="sm" radius="md" p="xs" h="100%">
-        <ScrollArea h="100%">
-            {directories.length === 0 && (
-                <Text p="xs" c="dimmed">No sub-folders found.</Text>
-            )}
-            {directories.map((dir: Directory) => {
-                const isRoot = rootDirs.includes(dir.path);
-                return (
-                    <NavLink
-                        key={dir.path}
-                        label={isRoot 
-                            ? dir.path 
-                            : dir.name
-                        }
-                        leftSection={isRoot 
-                            ? <IconDisc size={16} /> 
-                            : <IconFolder size={16} />
-                        }
-                        active={dir.path === currentPath}
-                        onClick={() => readDirectory(dir.path)}
-                        variant="subtle"
-                    />
-                );
-            })}
-        </ScrollArea>
+            <ScrollArea h="100%">
+                {directories.length === 0 && (
+                    <Text p="xs" c="dimmed">No sub-folders found.</Text>
+                )}
+                {directories.map((dir: Directory) => {
+                    const isRoot = rootDirs.includes(dir.path);
+                    return (
+                        <NavLink
+                            key={dir.path}
+                            label={isRoot 
+                                ? dir.path 
+                                : dir.name
+                            }
+                            leftSection={isRoot 
+                                ? <IconDisc size={16} /> 
+                                : <IconFolder size={16} />
+                            }
+                            active={dir.path === currentPath}
+                            onClick={() => readDirectory(dir.path)}
+                            variant="subtle"
+                        />
+                    );
+                })}
+            </ScrollArea>
         </Paper>
     );
 }
