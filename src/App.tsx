@@ -1,15 +1,13 @@
 import { 
-    Anchor, 
+    Anchor,
     AppShell, 
     Box, 
     Breadcrumbs, 
     Flex,
-    Group, 
     LoadingOverlay, 
     Paper,
-    Stack
 } from '@mantine/core';
-import { BreadcrumbItem } from './interfaces/ui'; 
+import { BreadcrumbItem } from './interfaces/ui';
 import { useEffect, useState } from 'react';
 import AdvancedSearchModal from './AdvancedSeachModal';
 import AppFooter from './AppFooter';
@@ -23,7 +21,7 @@ import useFoxPhotoStore from './store/store';
 
 const App = () => {
     const { 
-        currentPath, 
+        currentPath,
         getRootDirs, 
         isSlideshowActive,
         loadSettings,
@@ -56,13 +54,14 @@ const App = () => {
         return { title: part, href: path };
     });
 
+
     return (
         <>
             <AppShell
                 footer={{ height: 48 }}
                 header={{ height: 60 }}
                 navbar={{ 
-                    width: 300, 
+                    width: 250, 
                     breakpoint: 'sm', 
                     collapsed: {
                         desktop: navbarClosed 
@@ -73,44 +72,54 @@ const App = () => {
                     <AppHeader 
                         isNavbarClosed={navbarClosed}
                         onOpenAdvancedSearch={() => setAdvancedSearchOpen(true)}
-                        onToggleNavbar={() => setNavbarClosed((open) => !open)} />
+                        onToggleNavbar={() => setNavbarClosed((open) => !open)}>
+                    </AppHeader>
                 </AppShell.Header>
 
                 <AppShell.Navbar p="xs">
                     <FileExplorer />
                 </AppShell.Navbar>
 
-                <AppShell.Main>
+                <AppShell.Main 
+                    style={{
+                        overflowY: 'hidden',
+                        maxHeight: '100vh'
+                    }}
+                >
+                    {currentPath && (
+                        <Breadcrumbs>
+                            <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
+                            {breadcrumbs.map((item, index) => (
+                                <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
+                                    {item.title}
+                                </Anchor>
+                            ))}
+                        </Breadcrumbs>
+                    )}
+
                     <Paper 
                         p="md" 
                         shadow="sm" 
                         radius="md" 
+                        h="100%"
                         style={{ 
-                            position: 'relative', 
-                            minHeight: 'calc(100vh - 120px)'
+                            display: 'flex',
+                            flexDirection: 'column'
                         }}>
                         <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-                        {currentPath && (
-                            <Breadcrumbs>
-                                <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
-                                {breadcrumbs.map((item, index) => (
-                                    <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
-                                        {item.title}
-                                    </Anchor>
-                                ))}
-                            </Breadcrumbs>
-                        )}
-
-                        <Flex direction="row" gap="md" h="100%">
-                            <Box style={{ flex: 1, minWidth: 0 }}>
+                        <Flex 
+                            direction="row" 
+                            gap="md" 
+                            h="100%"
+                            style={{ flex: 1, minHeight: 0 }}>
+                            <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ImageView />
                             </Box>
-                            <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ThumbnailGrid />
                             </Box>
                         </Flex>
-
                     </Paper>
                 </AppShell.Main>
                 <AppShell.Footer p="xs">

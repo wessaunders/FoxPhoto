@@ -1,5 +1,10 @@
 import { Directory, ImageType, LoadingState } from '../interfaces/ui';
 
+interface SelectedImage {
+    path: string | null,
+    rotation: number
+};
+
 export interface DirectorySlice {
     currentPath: string;
     directories: Directory[];
@@ -7,16 +12,18 @@ export interface DirectorySlice {
     images: ImageType[];
     loadingState: LoadingState;
     rootDirs: string[];
-    selectedImage: string | null;
+    selectedImage: SelectedImage,
     showFullSizeImage: boolean,
     closeImage: () => void;
     getRootDirs: () => Promise<void>;
     nextImage: () => void;
     prevImage: () => void;
     readDirectory: (folderPath: string) => Promise<void>;
+    rotateLeft: () => void;
+    rotateRight: () => void;
     selectImage: (imagePath: string) => void;
     setShowFullSizeImage: () => void;
-}
+};
 
 export const createDirectorySlice = (set, get): DirectorySlice => ({
     currentPath: '',
@@ -28,7 +35,10 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
         isLoadingImage: false,
     },
     rootDirs: [],
-    selectedImage: null,
+    selectedImage: {
+        path: null,
+        rotation: 0
+    } as SelectedImage,
     showFullSizeImage: false,
     closeImage: () => set({ 
         showFullSizeImage: false 
@@ -163,8 +173,32 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
             } 
         });
     },
+    rotateLeft: () => {
+        const currentRotation = get().selectedImage.rotation;
+
+        set({ selectedImage: {
+                ...get().selectedImage,
+                rotation: currentRotation - 90
+            }
+        });
+    }, 
+    rotateRight: () => {
+        const currentRotation = get().selectedImage.rotation;
+
+        set({
+            selectedImage: {
+                ...get().selectedImage,
+                rotation: currentRotation + 90
+            }
+        });
+    },
     selectImage: (imagePath) => {
-        set({ selectedImage: imagePath });
+        set({ 
+            selectedImage: {
+                path: imagePath, 
+                rotation: 0 
+            }
+        });
     },
     setShowFullSizeImage: () => {
         set({

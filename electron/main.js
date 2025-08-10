@@ -122,7 +122,12 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
             if (file.isDirectory()) {
                 directories.push({ name: file.name, path: fullPath });
             } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
-                const exif = await exifr.parse(fullPath);
+                let exif = {};
+                try {
+                    exif = await exifr.parse(fullPath);
+                } catch (error) {
+                    console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
+                }
                 const meta = await getImageMetadata(fullPath);
                 images.push({ name: file.name, path: fullPath, ...meta, ...exif });
             }

@@ -24,6 +24,7 @@ const AppHeader = (props: AppHeaderProps) => {
         clearSearchTerm,
         currentPath,
         images,
+        readDirectory, 
         searchTerm,
         selectedImagesForSlideshow,
         setSearchTerm,
@@ -47,7 +48,7 @@ const AppHeader = (props: AppHeaderProps) => {
             return;
         }
         const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-        useFoxPhotoStore.getState().readDirectory(parentPath || '/');
+        readDirectory(parentPath || '/');
     };
 
     return (
@@ -91,7 +92,7 @@ const AppHeader = (props: AppHeaderProps) => {
                     disabled={images.length === 0 && selectedImagesForSlideshow.length === 0}>
                     Slideshow
                 </Button>
-                
+
                 <ActionIcon
                     variant="subtle"
                     onClick={onOpenAdvancedSearch}>
@@ -109,7 +110,7 @@ const AppHeader = (props: AppHeaderProps) => {
                                 <ThemeIcon variant="subtle">
                                     <IconMoon size={16} />
                                 </ThemeIcon>
-                            )                        
+                            )
                         },
                         {
                             value: 'dark',
@@ -123,7 +124,7 @@ const AppHeader = (props: AppHeaderProps) => {
                 >
                 </SegmentedControl>
             </Group>
-        </Group>
+        </Group>            
     );
 }
 

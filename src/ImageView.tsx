@@ -17,8 +17,8 @@ const ImageView = () => {
             setError(null);
 
             try {
-                const url = selectedImage 
-                    ? await window.electronAPI.readImage(selectedImage) 
+                const url = selectedImage.path 
+                    ? await window.electronAPI.readImage(selectedImage.path) 
                     : null;
                 if (isMounted) {
                     if (url) {
@@ -39,7 +39,7 @@ const ImageView = () => {
             }
         };
 
-        if (selectedImage) {
+        if (selectedImage && selectedImage.path) {
             fetchFullImage();
         }
 
@@ -66,11 +66,16 @@ const ImageView = () => {
                             <Image
                                 src={imageDataUrl}
                                 alt="Image"
-                                style={{ objectFit: 'contain', maxHeight: '90vh', maxWidth: '90vw' }}
+                                style={{ 
+                                    objectFit: 'contain', 
+                                    maxHeight: '90vh', 
+                                    maxWidth: '90vw',
+                                    transform: `rotate(${selectedImage.rotation}deg)` 
+                                }}
                             />
                         )}
                     </Box>
-                    <Group>
+                    <Group justify="flex-end">
                         <ActionIcon
                             onClick={toggleShowSelectedImageFullSize}>
                             <IconArrowsDiagonal size={24} />

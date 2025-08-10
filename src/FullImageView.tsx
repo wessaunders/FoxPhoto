@@ -9,7 +9,7 @@ const FullImageView = () => {
     const [imageDataUrl, setImageDataUrl] = useState < string | null > (null);
     const [isLoading, setIsLoading] = useState(true);
 
-    const currentIndex = images.findIndex((img: { path: string }) => img.path === selectedImage);
+    const currentIndex = images.findIndex((img: { path: string }) => img.path === selectedImage.path);
     const isFirstImage = currentIndex === 0;
     const isLastImage = currentIndex === images.length - 1;
 
@@ -21,8 +21,8 @@ const FullImageView = () => {
             setError(null);
 
             try {
-                const url = selectedImage 
-                    ? await window.electronAPI.readImage(selectedImage) 
+                const url = selectedImage.path 
+                    ? await window.electronAPI.readImage(selectedselectedImage.pathmage) 
                     : null;
                 if (isMounted) {
                     if (url) {
@@ -43,14 +43,14 @@ const FullImageView = () => {
             }
         };
 
-        if (selectedImage) {
+        if (selectedImage && selectedImage.path) {
             fetchFullImage();
         }
 
         return () => {
             isMounted = false;
         };
-    }, [selectedImage]);
+    }, [selectedImage.path]);
 
     return (
         <Modal
@@ -79,15 +79,20 @@ const FullImageView = () => {
             <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                 {error ? (
-                <Alert title="Error" color="red">
-                    {error}
-                </Alert>
+                    <Alert title="Error" color="red">
+                        {error}
+                    </Alert>
                 ) : (
-                <Image
-                    src={imageDataUrl}
-                    alt="Full-sized image"
-                    style={{ objectFit: 'contain', maxHeight: '90vh', maxWidth: '90vw' }}
-                />
+                    <Image
+                        src={imageDataUrl}
+                        alt="Full-sized image"
+                        style={{ 
+                            objectFit: 'contain', 
+                            maxHeight: '90vh', 
+                            maxWidth: '90vw',
+                            transform: `rotate(${selectedImage.rotation}deg)` 
+                        }}
+                    />
                 )}
             </Box>
 

@@ -1,6 +1,6 @@
 import { DirectoryType, ImageType } from './interfaces/ui'; 
 import { IconFileBroken } from '@tabler/icons-react';
-import { SimpleGrid, Checkbox, Flex, Image, Text, Alert, Box } from '@mantine/core';
+import { Alert, Box, Checkbox, Flex, Image, ScrollArea, SimpleGrid, Text  } from '@mantine/core';
 import ImageThumbnail from './ImageThumbnail';
 import useFoxPhotoStore from './store/store';
 
@@ -59,77 +59,82 @@ const ThumbnailGrid = () => {
     ];
 
     return (
-        <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="md" style={{ position: 'relative' }}>
-            {allItems.map((item) => (
-                <Box
-                    key={item.path}
-                    style={{
-                        position: 'relative',
-                        cursor: 'pointer',
-                        overflow: 'hidden',
-                        borderRadius: 'var(--mantine-radius-md)',
-                        boxShadow: 'var(--mantine-shadow-xs)',
-                    }}
-                >
-                    {item.type === 'image' && (
-                        <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                            onClick={() => handleThumbnailClick(item)}
-                        >
-                            <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
-                                <Image
-                                    src={item.path}
-                                    alt={item.name}
-                                    style={{ objectFit: 'cover', height: '100%', width: '100%' }}
-                                />
-                            </Box>
-                            <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
-                            <Checkbox
-                                checked={selectedImagesForSlideshow.includes(item.path)}
-                                onChange={() => toggleImageForSlideshow(item.path)}
-                                onClick={(e) => e.stopPropagation()} // Prevent parent click from firing
-                                style={{
-                                    position: 'absolute',
-                                    top: '0.5rem',
-                                    right: '0.5rem',
-                                    zIndex: 2,
-                                }}
-                            />
-                        </Flex>
-                    )}
-                    {item.type === 'directory' && (
-                        <Flex
-                            direction="column"
-                            align="center"
-                            justify="center"
-                            onClick={() => handleDirectoryClick(item)}
-                        >
-                            <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
-                                <Box
-                                    style={{
-                                        backgroundColor: 'var(--mantine-color-gray-2)',
-                                        height: '100%',
-                                        width: '100%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Text size="xl">📁</Text>
+        <ScrollArea h="calc(100vh - 180px)">
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="md" style={{ position: 'relative' }}>
+                {allItems.map((item) => (
+                    <Box
+                        key={item.path}
+                        style={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            overflow: 'hidden',
+                            borderRadius: 'var(--mantine-radius-md)',
+                            boxShadow: 'var(--mantine-shadow-xs)',
+                        }}
+                    >
+                        {item.type === 'image' && (
+                            <Flex
+                                direction="column"
+                                align="center"
+                                justify="center"
+                                onClick={() => handleThumbnailClick(item)}
+                            >
+                                <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
+                                    <Image
+                                        src={item.path}
+                                        alt={item.name}
+                                        style={{ 
+                                            objectFit: 'cover', 
+                                            height: '100%', 
+                                            width: '100%' }}
+                                    />
                                 </Box>
-                            </Box>
-                            <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
-                        </Flex>
-                    )}
-                </Box>
-            ))}
+                                <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
+                                <Checkbox
+                                    checked={selectedImagesForSlideshow.includes(item.path)}
+                                    onChange={() => toggleImageForSlideshow(item.path)}
+                                    onClick={(e) => e.stopPropagation()} // Prevent parent click from firing
+                                    style={{
+                                        position: 'absolute',
+                                        top: '0.5rem',
+                                        right: '0.5rem',
+                                        zIndex: 2,
+                                    }}
+                                />
+                            </Flex>
+                        )}
+                        {item.type === 'directory' && (
+                            <Flex
+                                direction="column"
+                                align="center"
+                                justify="center"
+                                onClick={() => handleDirectoryClick(item)}
+                            >
+                                <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
+                                    <Box
+                                        style={{
+                                            backgroundColor: 'var(--mantine-color-gray-2)',
+                                            height: '100%',
+                                            width: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Text size="xl">📁</Text>
+                                    </Box>
+                                </Box>
+                                <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
+                            </Flex>
+                        )}
+                    </Box>
+                ))}
 
-            {/* {images.map((image) => (
+                {/* {images.map((image) => (
                 <ImageThumbnail key={image.path} image={image} selectImage={selectImage} />
             ))} */}
-        </SimpleGrid>
+            </SimpleGrid>
+        </ScrollArea>
     );
 }
 
