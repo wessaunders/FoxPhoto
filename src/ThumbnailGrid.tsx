@@ -1,7 +1,6 @@
 import { DirectoryType, ImageType } from './interfaces/ui'; 
 import { IconFileBroken } from '@tabler/icons-react';
-import { SimpleGrid, Card, Checkbox, Flex, Image, Text, LoadingOverlay, Alert, Box, Skeleton } from '@mantine/core';
-import { useState, useEffect } from 'react';
+import { SimpleGrid, Checkbox, Flex, Image, Text, Alert, Box } from '@mantine/core';
 import ImageThumbnail from './ImageThumbnail';
 import useFoxPhotoStore from './store/store';
 
@@ -55,8 +54,8 @@ const ThumbnailGrid = () => {
     } 
 
     const allItems: Item[] = [
-        ...directories.map(dir => ({ ...dir, type: 'directory' })),
-        ...images.map(img => ({ ...img, type: 'image' }))
+        ...directories.map(dir => ({ ...dir, type: 'directory' as const })),
+        ...images.map(img => ({ ...img, type: 'image' as const }))
     ];
 
     return (

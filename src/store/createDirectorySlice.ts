@@ -8,12 +8,14 @@ export interface DirectorySlice {
     loadingState: LoadingState;
     rootDirs: string[];
     selectedImage: string | null;
+    showFullSizeImage: boolean,
     closeImage: () => void;
     getRootDirs: () => Promise<void>;
     nextImage: () => void;
     prevImage: () => void;
     readDirectory: (folderPath: string) => Promise<void>;
     selectImage: (imagePath: string) => void;
+    setShowFullSizeImage: () => void;
 }
 
 export const createDirectorySlice = (set, get): DirectorySlice => ({
@@ -27,7 +29,10 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
     },
     rootDirs: [],
     selectedImage: null,
-    closeImage: () => set({ selectedImage: null }),
+    showFullSizeImage: false,
+    closeImage: () => set({ 
+        showFullSizeImage: false 
+    }),
     getRootDirs: async () => {
         set({ loadingState: { isScanning: true, isLoadingImage: false } });
 
@@ -147,6 +152,8 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
                 directories: filteredDirectories,
                 images: filteredImages,
                 error: null,
+                selectedImage: null,
+                showFullSizeImage: false
             });
         }
         set({ 
@@ -158,5 +165,10 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
     },
     selectImage: (imagePath) => {
         set({ selectedImage: imagePath });
+    },
+    setShowFullSizeImage: () => {
+        set({
+            showFullSizeImage: !get().showFullSizeImage
+        })
     }
 });

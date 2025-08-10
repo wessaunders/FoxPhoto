@@ -1,10 +1,13 @@
 import { 
     Anchor, 
     AppShell, 
+    Box, 
     Breadcrumbs, 
-    Flex, 
+    Flex,
+    Group, 
     LoadingOverlay, 
-    Paper
+    Paper,
+    Stack
 } from '@mantine/core';
 import { BreadcrumbItem } from './interfaces/ui'; 
 import { useEffect, useState } from 'react';
@@ -13,6 +16,7 @@ import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
+import ImageView from './ImageView';
 import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
@@ -25,7 +29,7 @@ const App = () => {
         loadSettings,
         loadingState, 
         readDirectory, 
-        selectedImage,
+        showFullSizeImage,
         startingPath,
     } = useFoxPhotoStore();
 
@@ -87,20 +91,26 @@ const App = () => {
                         }}>
                         <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-                        <Flex direction="column" gap="md" h="100%">
-                            {currentPath && (
-                                <Breadcrumbs>
-                                    <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
-                                    {breadcrumbs.map((item, index) => (
-                                        <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
-                                            {item.title}
-                                        </Anchor>
-                                    ))}
-                                </Breadcrumbs>
-                            )}
+                        {currentPath && (
+                            <Breadcrumbs>
+                                <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
+                                {breadcrumbs.map((item, index) => (
+                                    <Anchor key={index} href="#" onClick={() => readDirectory(item.href)}>
+                                        {item.title}
+                                    </Anchor>
+                                ))}
+                            </Breadcrumbs>
+                        )}
 
-                            <ThumbnailGrid />
+                        <Flex direction="row" gap="md" h="100%">
+                            <Box style={{ flex: 1, minWidth: 0 }}>
+                                <ImageView />
+                            </Box>
+                            <Box style={{ flex: 1, minWidth: 0 }}>
+                                <ThumbnailGrid />
+                            </Box>
                         </Flex>
+
                     </Paper>
                 </AppShell.Main>
                 <AppShell.Footer p="xs">
@@ -109,7 +119,7 @@ const App = () => {
             </AppShell>
 
             <AdvancedSearchModal opened={advancedSearchOpen} onClose={() => setAdvancedSearchOpen(false)} />
-            {selectedImage && <FullImageView />}
+            {showFullSizeImage && <FullImageView />}
             {isSlideshowActive && <Slideshow />}
         </>
     );

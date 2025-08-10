@@ -5,46 +5,50 @@ import useFoxPhotoStore from './store/store';
 
 const FullImageView = () => {
     const { selectedImage, images, closeImage, nextImage, prevImage } = useFoxPhotoStore();
-    const [imageDataUrl, setImageDataUrl] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [imageDataUrl, setImageDataUrl] = useState < string | null > (null);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    const currentIndex = images.findIndex(img => img.path === selectedImage);
+    const currentIndex = images.findIndex((img: { path: string }) => img.path === selectedImage);
     const isFirstImage = currentIndex === 0;
     const isLastImage = currentIndex === images.length - 1;
 
     useEffect(() => {
         let isMounted = true;
+
         const fetchFullImage = async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const url = await window.electronAPI.readImage(selectedImage);
-            if (isMounted) {
-            if (url) {
-                setImageDataUrl(url);
-            } else {
-                setError("Failed to load image.");
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                const url = selectedImage 
+                    ? await window.electronAPI.readImage(selectedImage) 
+                    : null;
+                if (isMounted) {
+                    if (url) {
+                        setImageDataUrl(url);
+                    } else {
+                        setError("Failed to load image.");
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load full image:", e);
+                if (isMounted) {
+                    setError("Failed to load image.");
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
             }
-            }
-        } catch (e) {
-            console.error("Failed to load full image:", e);
-            if (isMounted) {
-            setError("Failed to load image.");
-            }
-        } finally {
-            if (isMounted) {
-            setIsLoading(false);
-            }
-        }
         };
 
         if (selectedImage) {
-        fetchFullImage();
+            fetchFullImage();
         }
 
         return () => {
-        isMounted = false;
+            isMounted = false;
         };
     }, [selectedImage]);
 

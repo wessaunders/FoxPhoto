@@ -110,6 +110,7 @@ foxphoto/
     ├── App.tsx                         # Main React application component
     ├── FileExplorer.tsx                # File explorer component
     ├── FullImageView.tsx               # Full image view component
+    ├── ImageView.tsx                   # Image view component
     ├── ImageThumbnail.tsx              # Thumbnail image component
     ├── main.tsx            
     ├── Slideshow.tsx                   # Slideshow component

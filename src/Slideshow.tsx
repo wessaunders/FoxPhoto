@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Box, Button, Text, Group } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
