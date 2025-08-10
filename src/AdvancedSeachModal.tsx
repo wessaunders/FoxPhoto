@@ -27,31 +27,44 @@ const AdvancedSearchModal = (props: AdvancedSearchModalProps) => {
                     label="Image Type"
                     data={IMAGE_TYPES}
                     value={advancedSearch.imageType}
-                    onChange={value => setAdvancedSearch({ imageType: value })}
+                    onChange={value => setAdvancedSearch({ imageType: value ?? undefined })}
                 />
                 <Select
                     label="Sort By"
                     data={SORT_OPTIONS}
                     value={advancedSearch.sortBy}
-                    onChange={value => setAdvancedSearch({ sortBy: value })}
+                    onChange={value => setAdvancedSearch({ sortBy: value as 'name' | 'date' | 'resolution' | undefined })}
                 />
                 <Select
                     label="Order"
                     data={ORDER_OPTIONS}
                     value={advancedSearch.sortOrder}
-                    onChange={value => setAdvancedSearch({ sortOrder: value })}
+                    onChange={value => setAdvancedSearch({ sortOrder: value as 'asc' | 'desc' | undefined })}
                 />
                 <Group>
                     <NumberInput
                         label="Min Width"
                         value={advancedSearch.minResolution?.width || ''}
-                        onChange={value => setAdvancedSearch({ minResolution: { ...advancedSearch.minResolution, width: value } })}
+                        onChange={value => setAdvancedSearch({ 
+                            minResolution: { 
+                                width: typeof value === 'number' 
+                                    ? value 
+                                    : Number(value), 
+                                height: advancedSearch.minResolution?.height ?? 0 
+                            } 
+                        })}
                         min={0}
                     />
                     <NumberInput
                         label="Min Height"
                         value={advancedSearch.minResolution?.height || ''}
-                        onChange={value => setAdvancedSearch({ minResolution: { ...advancedSearch.minResolution, height: value } })}
+                        onChange={value => setAdvancedSearch({ minResolution: { 
+                            width: advancedSearch.minResolution?.width ?? 0, 
+                            height: typeof value === 'number' 
+                                ? value 
+                                : Number(value) 
+                            } 
+                        })}
                         min={0}
                     />
                 </Group>

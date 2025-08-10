@@ -1,9 +1,13 @@
 import { ActionIcon, Group } from "@mantine/core"
 import { IconList, IconMovie, IconPhoto, IconRotate2, IconRotateClockwise2, IconZoomIn } from "@tabler/icons-react";
+import ThumbnailSizeControl from "./ThumbnailSizeControl";
 import useFoxPhotoStore from './store/store';
 
 const AppFooter = () => {
-    const { rotateLeft, rotateRight } = useFoxPhotoStore();
+    const { 
+        rotateLeft, 
+        rotateRight,
+    } = useFoxPhotoStore();
     
     const toggleList = () => {
         //toggle between thumbnails or details
@@ -11,10 +15,6 @@ const AppFooter = () => {
 
     const togglePhotoFilter = () => {
 
-    }
-
-    const toggleThumbnailSize = () => {
-        //toggle between set thumbnail sizes - 5 or 6 set sizes?
     }
 
     const toggleVideoFilter = () => {
@@ -51,11 +51,7 @@ const AppFooter = () => {
                     onClick={toggleList}>
                     <IconList size={24}/>
                 </ActionIcon>
-                <ActionIcon
-                    variant="subtle"
-                    onClick={toggleThumbnailSize}>
-                    <IconZoomIn size={24}/>
-                </ActionIcon>
+                <ThumbnailSizeControl />
             </Group>
         </Group>
     );

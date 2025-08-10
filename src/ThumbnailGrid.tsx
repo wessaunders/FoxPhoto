@@ -1,6 +1,16 @@
+import { 
+    Alert, 
+    Box, 
+    Checkbox, 
+    Flex, 
+    Image, 
+    ScrollArea, 
+    SimpleGrid, 
+    Text 
+} from '@mantine/core';
 import { DirectoryType, ImageType } from './interfaces/ui'; 
 import { IconFileBroken } from '@tabler/icons-react';
-import { Alert, Box, Checkbox, Flex, Image, ScrollArea, SimpleGrid, Text  } from '@mantine/core';
+import { useEffect, useRef, useState } from 'react';
 import ImageThumbnail from './ImageThumbnail';
 import useFoxPhotoStore from './store/store';
 
@@ -14,9 +24,28 @@ const ThumbnailGrid = () => {
         loadingState,
         readDirectory,
         selectImage,
-        selectedImagesForSlideshow, 
+        selectedImagesForSlideshow,
+        thumbnailSize, 
         toggleImageForSlideshow
     } = useFoxPhotoStore();
+
+    const gridRef = useRef<HTMLDivElement>(null);
+    const [containerWidth, setContainerWidth] = useState<number>(window.innerWidth);
+    const [cols, setCols] = useState<number>(4);
+
+    useEffect(() => {
+        if (gridRef && gridRef.current) {
+            setContainerWidth(gridRef.current.offsetWidth);
+        }
+    }, [gridRef]);
+
+    useEffect(() => {
+        if (containerWidth && thumbnailSize) {
+            const minColumnWidth = thumbnailSize + 24;
+            const calculatedColumns = Math.max(1, Math.floor(containerWidth / minColumnWidth));
+            setCols(calculatedColumns);
+        }
+    }, [containerWidth, thumbnailSize])
 
     const handleThumbnailClick = (image: ImageType) => {
         selectImage(image.path);
@@ -59,8 +88,11 @@ const ThumbnailGrid = () => {
     ];
 
     return (
-        <ScrollArea h="calc(100vh - 180px)">
-            <SimpleGrid cols={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing="md" style={{ position: 'relative' }}>
+        <ScrollArea h="calc(100vh - 192px)">
+            <SimpleGrid 
+                cols={cols}
+                spacing="md" 
+                style={{ position: 'relative' }}>
                 {allItems.map((item) => (
                     <Box
                         key={item.path}
@@ -69,7 +101,7 @@ const ThumbnailGrid = () => {
                             cursor: 'pointer',
                             overflow: 'hidden',
                             borderRadius: 'var(--mantine-radius-md)',
-                            boxShadow: 'var(--mantine-shadow-xs)',
+                            boxShadow: 'var(--mantine-shadow-xs)'
                         }}
                     >
                         {item.type === 'image' && (

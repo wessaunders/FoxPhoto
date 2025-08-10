@@ -115,7 +115,8 @@ foxphoto/
     ├── main.tsx            
     ├── Slideshow.tsx                   # Slideshow component
     ├── SlideshowControls.tsx           # Slideshow controls component
-    └── ThumbnailGrid.tsx               # Thumbnail grid component
+    ├── ThumbnailGrid.tsx               # Thumbnail grid component
+    └── ThumbnailSizeControl.tsx        # Thumbnail size component
 ```
 
 ## 🔒 Security Considerations

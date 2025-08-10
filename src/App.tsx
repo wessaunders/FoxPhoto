@@ -58,7 +58,7 @@ const App = () => {
     return (
         <>
             <AppShell
-                footer={{ height: 48 }}
+                footer={{ height: 60 }}
                 header={{ height: 60 }}
                 navbar={{ 
                     width: 250, 
