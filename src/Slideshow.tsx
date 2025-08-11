@@ -1,24 +1,34 @@
 import { useEffect, useRef } from 'react';
 import { Box, Button, Text, Group } from '@mantine/core';
-import { IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
+import { IconChevronLeft, IconChevronRight, IconPlayerPause, IconPlayerPlay, IconX } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import SlideshowControls from './SlideshowControls';
 import './Slideshow.css';
 
 const Slideshow = () => {
     const { 
+        isSlideshowPaused,
+        nextSlide,
+        pauseSlideshow,
+        playSlideshow,
+        previousSlide,
         slideshowImages, 
         slideshowIndex, 
         slideshowDelay,
         slideshowEffect,
-        nextSlide,
-        previousSlide,
         stopSlideshow 
     } = useFoxPhotoStore();
     
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
+        if (isSlideshowPaused) {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+            return;
+        }
+
         // Clear any existing timer when the component re-renders or unmounts
         if (timerRef.current) {
             clearInterval(timerRef.current);
@@ -31,31 +41,12 @@ const Slideshow = () => {
 
         // Cleanup function to clear the interval when the component unmounts
         return () => {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-        }
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
         };
-    }, [slideshowIndex, slideshowDelay, nextSlide, slideshowImages.length]);
+    }, [isSlideshowPaused, slideshowIndex, slideshowDelay, nextSlide, slideshowImages.length]);
 
-    // Handle key presses for navigation
-    useEffect(() => {
-        const handleKeyPress = (e) => {
-        if (e.key === 'ArrowRight') {
-            nextSlide();
-        } else if (e.key === 'ArrowLeft') {
-            previousSlide();
-        } else if (e.key === 'Escape') {
-            stopSlideshow();
-        }
-        };
-
-        window.addEventListener('keydown', handleKeyPress);
-
-        return () => {
-            window.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [nextSlide, previousSlide, stopSlideshow]);
-    
     if (slideshowImages.length === 0) {
         return null;
     }
@@ -101,9 +92,9 @@ const Slideshow = () => {
 
             <Box
                 style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
+                    position: 'absolute',
+                    top: '1rem',
+                    right: '1rem',
                 }}>
                 <Button onClick={stopSlideshow} size="lg" color="red" variant="subtle" style={{borderRadius: '50%', padding: '0.5rem'}}>
                     <IconX size={24} />
@@ -120,6 +111,18 @@ const Slideshow = () => {
                 <Group>
                     <Button onClick={previousSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
                         <IconChevronLeft size={24} />
+                    </Button>
+                    <Button
+                        onClick={isSlideshowPaused 
+                            ? playSlideshow 
+                            : pauseSlideshow}
+                        size="lg"
+                        variant="filled"
+                        style={{ borderRadius: '50%', padding: '0.5rem' }}>
+                        {isSlideshowPaused 
+                            ? <IconPlayerPlay size={24} /> 
+                            : <IconPlayerPause size={24} />
+                        }
                     </Button>
                     <Button onClick={nextSlide} size="lg" variant="filled" style={{borderRadius: '50%', padding: '0.5rem'}}>
                         <IconChevronRight size={24} />

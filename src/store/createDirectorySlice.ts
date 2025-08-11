@@ -16,9 +16,11 @@ export interface DirectorySlice {
     showFullSizeImage: boolean,
     closeImage: () => void;
     getRootDirs: () => Promise<void>;
+    navigateToParent: () => Promise<void>;
     nextImage: () => void;
     prevImage: () => void;
     readDirectory: (folderPath: string) => Promise<void>;
+    refreshDirectory: () => Promise<void>;
     rotateLeft: () => void;
     rotateRight: () => void;
     selectImage: (imagePath: string) => void;
@@ -55,6 +57,12 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
             currentPath: '',
             loadingState: { isScanning: false, isLoadingImage: false },
         });
+    },
+    navigateToParent: async () => {
+        if (get().currentPath !== '/') {
+            const parentPath = get().currentPath.substring(0, get().currentPath.lastIndexOf('/'));
+            get().readDirectory(parentPath || '/');
+        }
     },
     nextImage: () => {
         const { images, selectedImage } = get();
@@ -172,6 +180,9 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
                 isLoadingImage: false 
             } 
         });
+    },
+    refreshDirectory: async () => {
+        get().readDirectory(get().currentPath);
     },
     rotateLeft: () => {
         const currentRotation = get().selectedImage.rotation;

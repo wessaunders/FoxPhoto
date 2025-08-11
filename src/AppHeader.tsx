@@ -7,32 +7,37 @@ import {
     TextInput,
     ThemeIcon,
     Title,
+    Tooltip,
     useMantineColorScheme
 } from '@mantine/core';
-import { IconArrowBackUp, IconHome, IconPlayerPlay, IconFilterSearch, IconSearch, IconMoon, IconSun, IconX } from '@tabler/icons-react';
+import { IconArrowBackUp, IconHome, IconPlayerPlay, IconFilterSearch, IconSearch, IconMoon, IconSun, IconX, IconQuestionMark } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 
 interface AppHeaderProps {
     isNavbarClosed: boolean;
     onToggleNavbar: () => void;
-    onOpenAdvancedSearch: () => void;
+    onToggleAdvancedSearch: () => void;
 }
 
 const AppHeader = (props: AppHeaderProps) => {
-    const { isNavbarClosed, onToggleNavbar, onOpenAdvancedSearch } = props;
+    const { isNavbarClosed, onToggleNavbar, onToggleAdvancedSearch } = props;
     const {
         clearSearchTerm,
         currentPath,
         images,
+        navigateToParent,
         readDirectory, 
         searchTerm,
         selectedImagesForSlideshow,
         setSearchTerm,
         setStartingPath,
-        startSlideshow
+        startSlideshow, 
+        toggleKeyboardShortcuts,
     } = useFoxPhotoStore();
 
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    useKeyboardShortcuts({ toggleColorScheme });
 
     const clearButton = searchTerm && (
         <ActionIcon
@@ -42,14 +47,6 @@ const AppHeader = (props: AppHeaderProps) => {
             <IconX size={16} />
         </ActionIcon>
     );
-
-    const handleNavigateUp = () => {
-        if (currentPath === '/') {
-            return;
-        }
-        const parentPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
-        readDirectory(parentPath || '/');
-    };
 
     return (
         <Group justify="space-between" h="100%">
@@ -68,7 +65,7 @@ const AppHeader = (props: AppHeaderProps) => {
                     </ActionIcon>
                     {currentPath !== '/' && (
                         <ActionIcon
-                            variant="light" onClick={handleNavigateUp}>
+                            variant="light" onClick={navigateToParent}>
                             <IconArrowBackUp size={24} />
                         </ActionIcon>
                     )}
@@ -95,7 +92,7 @@ const AppHeader = (props: AppHeaderProps) => {
 
                 <ActionIcon
                     variant="subtle"
-                    onClick={onOpenAdvancedSearch}>
+                    onClick={onToggleAdvancedSearch}>
                     <IconFilterSearch size={20} />
                 </ActionIcon>
             </Group>
@@ -123,6 +120,13 @@ const AppHeader = (props: AppHeaderProps) => {
                     ]}
                 >
                 </SegmentedControl>
+                <Tooltip label="Keyboard Shortcuts (?)">
+                    <ActionIcon
+                        variant="subtle"
+                        onClick={toggleKeyboardShortcuts}>
+                        <IconQuestionMark size={18} />
+                    </ActionIcon>
+                </Tooltip>
             </Group>
         </Group>            
     );

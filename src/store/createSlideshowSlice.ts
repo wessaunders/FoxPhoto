@@ -1,9 +1,12 @@
 export interface SlideshowSlice {
     isSlideshowActive: boolean;
+    isSlideshowPaused: boolean,
     slideshowImages: string[];
     slideshowIndex: number;
     selectedImagesForSlideshow: string[];
     nextSlide: () => void;
+    pauseSlideshow: () => void;
+    playSlideshow: () => void;
     previousSlide: () => void;
     startSlideshow: () => void;
     stopSlideshow: () => void;
@@ -12,6 +15,7 @@ export interface SlideshowSlice {
 
 export const createSlideshowSlice = (set, get): SlideshowSlice => ({
     isSlideshowActive: false,
+    isSlideshowPaused: false,
     slideshowImages: [],
     slideshowIndex: 0,
     selectedImagesForSlideshow: [],
@@ -19,6 +23,16 @@ export const createSlideshowSlice = (set, get): SlideshowSlice => ({
         set(state => ({
             slideshowIndex: (state.slideshowIndex + 1) % state.slideshowImages.length,
         }));
+    },
+    pauseSlideshow: () => {
+        set({
+            isSlideshowPaused: false
+        });
+    }, 
+    playSlideshow: () => {
+        set({
+            isSlideshowPaused: true
+        });
     },
     previousSlide: () => {
         set(state => ({

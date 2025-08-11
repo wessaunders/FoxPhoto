@@ -99,10 +99,10 @@ foxphoto/
     ├── hooks/
     │   └── useImageDataLoader.ts
     ├── store/
-    │   ├── createDirectorySlice.ts    # Zustand store slice containing directory functionality
-    │   ├── createSearchSlice.ts       # Zustand store slice containing search functionality
-    │   ├── createSetingsSlice.ts      # Zustand store slice containing persistent settings functionality
-    │   ├── createSlideshowSlice.ts    # Zustand store slice containing slideshow functionality
+    │   ├── createDirectorySlice.ts     # Zustand store slice containing directory functionality
+    │   ├── createSearchSlice.ts        # Zustand store slice containing search functionality
+    │   ├── createSetingsSlice.ts       # Zustand store slice containing persistent settings functionality
+    │   ├── createSlideshowSlice.ts     # Zustand store slice containing slideshow functionality
     │   └── store.ts                    # Zustand global state store
     ├── AdvancedSearchModal.tsx         # Advanced search modal component
     ├── AppFooter.tsx                   # Main React application footer component
@@ -112,6 +112,7 @@ foxphoto/
     ├── FullImageView.tsx               # Full image view component
     ├── ImageView.tsx                   # Image view component
     ├── ImageThumbnail.tsx              # Thumbnail image component
+    ├── KeyboardShortcutsModal.tsx      # Modal helpscreen component showing available keyboard shortcuts
     ├── main.tsx            
     ├── Slideshow.tsx                   # Slideshow component
     ├── SlideshowControls.tsx           # Slideshow controls component

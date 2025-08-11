@@ -10,10 +10,12 @@ interface AdvancedSearchOptions {
 
 export interface SearchSlice {
     advancedSearch: AdvancedSearchOptions;
+    advancedSearchOpen: boolean,
     searchTerm: string;
     clearSearchTerm: () => void;
     setAdvancedSearch: (options: Partial<AdvancedSearchOptions>) => void;
     setSearchTerm: (term: string) => void;
+    toggleAdvancedSearch: () => void;
 }
 
 export const createSearchSlice = (set, get): SearchSlice => ({
@@ -23,6 +25,7 @@ export const createSearchSlice = (set, get): SearchSlice => ({
         sortOrder: 'asc',
         minResolution: undefined,
     },
+    advancedSearchOpen: false,
     searchTerm: '',
     clearSearchTerm: () => {
         set({ searchTerm: '' });
@@ -40,4 +43,7 @@ export const createSearchSlice = (set, get): SearchSlice => ({
         set({ searchTerm: term });
         get().readDirectory(get().currentPath);
     },
+    toggleAdvancedSearch: () => {
+        set({ advancedSearchOpen: !get().advancedSearchOpen });
+    }
 });

@@ -18,20 +18,34 @@ import ImageView from './ImageView';
 import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
+import { useHotkeys } from '@mantine/hooks';
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
+import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
 const App = () => {
     const { 
+        advancedSearchOpen,
         currentPath,
         getRootDirs, 
         isSlideshowActive,
+        keyboardShortcutsOpened,
         loadSettings,
         loadingState, 
         readDirectory, 
         showFullSizeImage,
         startingPath,
+        toggleAdvancedSearch, 
+        toggleKeyboardShortcuts
     } = useFoxPhotoStore();
 
-    const [advancedSearchOpen, setAdvancedSearchOpen] = useState(false);
+
+    useKeyboardShortcuts({});
+
+    useHotkeys([
+        ['?', () => toggleKeyboardShortcuts],
+        ['F1', () => toggleKeyboardShortcuts],
+    ]);
+
     const [navbarClosed, setNavbarClosed] = useState(false);
 
     /** Initial load for settings and then directories */
@@ -71,7 +85,7 @@ const App = () => {
                 <AppShell.Header p="xs">
                     <AppHeader 
                         isNavbarClosed={navbarClosed}
-                        onOpenAdvancedSearch={() => setAdvancedSearchOpen(true)}
+                        onToggleAdvancedSearch={toggleAdvancedSearch}
                         onToggleNavbar={() => setNavbarClosed((open) => !open)}>
                     </AppHeader>
                 </AppShell.Header>
@@ -84,8 +98,7 @@ const App = () => {
                     style={{
                         overflowY: 'hidden',
                         maxHeight: '100vh'
-                    }}
-                >
+                    }}>
                     {currentPath && (
                         <Breadcrumbs>
                             <Anchor href="#" onClick={() => readDirectory('/')}>Root</Anchor>
@@ -127,7 +140,11 @@ const App = () => {
                 </AppShell.Footer>
             </AppShell>
 
-            <AdvancedSearchModal opened={advancedSearchOpen} onClose={() => setAdvancedSearchOpen(false)} />
+            <AdvancedSearchModal opened={advancedSearchOpen} onClose={toggleAdvancedSearch} />
+            <KeyboardShortcutsModal
+                opened={keyboardShortcutsOpened}
+                onClose={toggleKeyboardShortcuts}
+            />
             {showFullSizeImage && <FullImageView />}
             {isSlideshowActive && <Slideshow />}
         </>

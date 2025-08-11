@@ -11,9 +11,10 @@ const AdvancedSearchModal = (props: AdvancedSearchModalProps) => {
     const { opened, onClose } = props;
     const { 
         advancedSearch, 
-        setAdvancedSearch, 
+        currentPath,
         readDirectory, 
-        currentPath } = useFoxPhotoStore();
+        setAdvancedSearch
+    } = useFoxPhotoStore();
 
     const handleApply = () => {
         readDirectory(currentPath);

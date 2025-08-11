@@ -22,7 +22,7 @@ const FullImageView = () => {
 
             try {
                 const url = selectedImage.path 
-                    ? await window.electronAPI.readImage(selectedselectedImage.pathmage) 
+                    ? await window.electronAPI.readImage(selectedImage.path) 
                     : null;
                 if (isMounted) {
                     if (url) {
