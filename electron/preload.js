@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getRootDirs: () => ipcRenderer.invoke('get-root-dirs'),
     loadSettings: () => ipcRenderer.invoke('load-settings'),
     readDirectory: (folderPath) => ipcRenderer.invoke('read-directory', folderPath),
+    readFileAsArrayBuffer: (filePath) => ipcRenderer.invoke('read-file-as-array-buffer', filePath),
     readImage: (imagePath) => ipcRenderer.invoke('read-image', imagePath),
     renderPdfPage: (filePath, pageNumber, scale) => ipcRenderer.invoke('render-pdf-page', filePath, pageNumber, scale),
     saveSettings: (settings) => ipcRenderer.invoke('save-settings', settings),

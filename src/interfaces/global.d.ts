@@ -5,6 +5,7 @@ declare global {
         electronAPI: {
             getRootDirs: () => Promise<string[]>;
             loadSettings: () => Promise<{ startingPath: string | null; slideshowDelay: number; slideshowEffect: string }>;
+            readFileAsArrayBuffer: (filePath: string) => Promise<ArrayBuffer>;
             readImage: (imagePath: string) => Promise<string | null>;            
             readDirectory: (folderPath: string) => Promise<{
                 directories: { name: string; path: string }[];

@@ -35,16 +35,7 @@ export class PdfRenderer {
     }
 
     static async readFileAsArrayBuffer(filePath: string): Promise<ArrayBuffer> {
-        return new Promise((resolve, reject) => {
-            const fs = require('fs');
-            fs.readFile(filePath, (err: any, data: Buffer) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
-                }
-            });
-        });
+        return window.electronAPI.readFileAsArrayBuffer(filePath);
     }
 
     static async getPdfInfo(filePath: string): Promise<PdfInfo> {

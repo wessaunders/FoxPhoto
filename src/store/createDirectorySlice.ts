@@ -1,5 +1,4 @@
 import { Directory, ImageType, FileTypes, LoadingState, PdfType } from '../interfaces/ui';
-import path from 'path';
 
 interface SelectedImage {
     name: string | null,
@@ -214,7 +213,7 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
         });
     },
     selectImage: (imagePath) => {
-        const ext = path.extname(imagePath).toLowerCase();
+        const ext = imagePath.substring(imagePath.lastIndexOf('.')).toLowerCase();
 
         let fileType: FileTypes = FileTypes.ImageType;
         if (ext === '.pdf') {
@@ -223,7 +222,7 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
 
         set({ 
             selectedImage: {
-                name: path.basename(imagePath),
+                name: imagePath.split('/').pop() || imagePath,
                 path: imagePath, 
                 rotation: 0,
                 type: fileType 

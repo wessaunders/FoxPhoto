@@ -149,8 +149,7 @@ const ThumbnailGrid = () => {
                                 direction="column"
                                 align="center"
                                 justify="center"
-                                onClick={() => handleDirectoryClick(item)}
-                            >
+                                onClick={() => handleDirectoryClick(item)}>
                                 <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
                                     <Box
                                         style={{

@@ -4,7 +4,6 @@ const exifr = require('exifr');
 const fs = require('fs');
 const path = require('path');
 
-
 const isDev = process.env.NODE_ENV === 'development';
 
 function createWindow() {
@@ -171,6 +170,19 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
 
         return { directories: [], images: [], pdfs: [], error: error.message };
     }
+});
+
+ipcMain.handle('read-file-as-array-buffer', async (event, filePath) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength));
+            }
+        });
+    });
 });
 
 // IPC handler to read an image and return as a data URL
