@@ -8,7 +8,7 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "electron-dev": "concurrently \"npm run dev\" \"cross-env NODE_ENV=development electron .\"",
+        "electron-dev": "concurrently \"npm run dev\" \"cross-env NODE_ENV=development electron --inspect .\"",
         "build": "vite build",
         "start": "electron .",
         "electron": "electron .",

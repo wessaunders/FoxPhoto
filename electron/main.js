@@ -146,39 +146,22 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
             if (file.isDirectory()) {
                 directories.push({ name: file.name, path: fullPath });
             } else if (file.isFile()) {
-                switch (path.extname(file.name).toLowerCase())
-                {
-                    case (IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())):
-                        let exif = {};
+                if (IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+                    let exif = {};
 
-                        try {
-                            exif = await exifr.parse(fullPath);
-                        } catch (error) {
-                            console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
-                        }
+                    try {
+                        exif = await exifr.parse(fullPath);
+                    } catch (error) {
+                        console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
+                    }
 
-                        const meta = await getImageMetadata(fullPath);
-                        images.push({ name: file.name, path: fullPath, ...meta, ...exif });
-
-                        break;
-                    case (PDF_EXTENSIONS.includes(path.extname(file.name).toLowerCase())):
-                        pdfs.push({ name: file.name, path: fullPath });
-
-                        break;
-                    default:
-                        break;
+                    const meta = await getImageMetadata(fullPath);
+                    images.push({ name: file.name, path: fullPath, ...meta, ...exif });
                 }
 
-                // if (IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
-                //     let exif = {};
-                //     try {
-                //         exif = await exifr.parse(fullPath);
-                //     } catch (error) {
-                //         console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
-                //     }
-                //     const meta = await getImageMetadata(fullPath);
-                //     images.push({ name: file.name, path: fullPath, ...meta, ...exif });
-                // }
+                if (PDF_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+                    pdfs.push({ name: file.name, path: fullPath });
+                }
             }
         }
 
