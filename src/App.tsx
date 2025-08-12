@@ -9,16 +9,17 @@ import {
 } from '@mantine/core';
 import { BreadcrumbItem } from './interfaces/ui';
 import { useEffect, useState } from 'react';
+import { useHotkeys } from '@mantine/hooks';
 import AdvancedSearchModal from './AdvancedSeachModal';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
 import ImageView from './ImageView';
+import PdfViewer from './PdfViewer';
 import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
-import { useHotkeys } from '@mantine/hooks';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
@@ -37,16 +38,16 @@ const App = () => {
         toggleAdvancedSearch, 
         toggleKeyboardShortcuts
     } = useFoxPhotoStore();
-
-
     useKeyboardShortcuts({});
-
     useHotkeys([
         ['?', () => toggleKeyboardShortcuts],
         ['F1', () => toggleKeyboardShortcuts],
     ]);
 
     const [navbarClosed, setNavbarClosed] = useState(false);
+    const [pdfViewerOpened, setPdfViewerOpened] = useState(false);
+    const [currentPdfPath, setCurrentPdfPath] = useState<string | null>(null);
+    const [currentPdfName, setCurrentPdfName] = useState<string | undefined>(undefined);
 
     /** Initial load for settings and then directories */
     useEffect(() => {
@@ -68,6 +69,17 @@ const App = () => {
         return { title: part, href: path };
     });
 
+    const closePdfViewer = () => {
+        setPdfViewerOpened(false);
+        setCurrentPdfPath(null);
+        setCurrentPdfName(undefined);
+    };
+
+    const openPdfViewer = (filePath: string, fileName: string) => {
+        setCurrentPdfPath(filePath);
+        setCurrentPdfName(fileName);
+        setPdfViewerOpened(true);
+    };
 
     return (
         <>
@@ -128,6 +140,7 @@ const App = () => {
                             style={{ flex: 1, minHeight: 0 }}>
                             <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ImageView />
+                                <PdfViewer />
                             </Box>
                             <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ThumbnailGrid />

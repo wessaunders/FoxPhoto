@@ -1,8 +1,11 @@
-import { Directory, ImageType, LoadingState } from '../interfaces/ui';
+import { Directory, ImageType, FileTypes, LoadingState, PdfType } from '../interfaces/ui';
+import path from 'path';
 
 interface SelectedImage {
+    name: string | null,
     path: string | null,
-    rotation: number
+    rotation: number, 
+    type: FileTypes
 };
 
 export interface DirectorySlice {
@@ -11,6 +14,7 @@ export interface DirectorySlice {
     error: string | null;
     images: ImageType[];
     loadingState: LoadingState;
+    pdfs: PdfType[],
     rootDirs: string[];
     selectedImage: SelectedImage,
     showFullSizeImage: boolean,
@@ -36,11 +40,14 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
         isScanning: false,
         isLoadingImage: false,
     },
+    pdfs: [],
     rootDirs: [],
     selectedImage: {
+        name: null,
         path: null,
-        rotation: 0
-    } as SelectedImage,
+        rotation: 0,
+        type: FileTypes.ImageType
+    },
     showFullSizeImage: false,
     closeImage: () => set({ 
         showFullSizeImage: false 
@@ -96,6 +103,7 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
             result = {
                 directories: rootDirs.map(d => ({ name: d, path: d })),
                 images: [],
+                pdfs: [],
                 error: null
             }
         } else {
@@ -106,7 +114,8 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
             set({ 
                 error: result.error, 
                 directories: [], 
-                images: [] 
+                images: [], 
+                pdfs: [] 
             });
         } else {
             const { searchTerm, advancedSearch } = get();
@@ -168,8 +177,9 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
             set({
                 currentPath: folderPath,
                 directories: filteredDirectories,
-                images: filteredImages,
                 error: null,
+                images: filteredImages,
+                pdfs: result.pdfs,
                 selectedImage: null,
                 showFullSizeImage: false
             });
@@ -204,10 +214,19 @@ export const createDirectorySlice = (set, get): DirectorySlice => ({
         });
     },
     selectImage: (imagePath) => {
+        const ext = path.extname(imagePath).toLowerCase();
+
+        let fileType: FileTypes = FileTypes.ImageType;
+        if (ext === '.pdf') {
+            fileType = FileTypes.PdfType;
+        }
+
         set({ 
             selectedImage: {
+                name: path.basename(imagePath),
                 path: imagePath, 
-                rotation: 0 
+                rotation: 0,
+                type: fileType 
             }
         });
     },

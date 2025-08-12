@@ -114,6 +114,8 @@ foxphoto/
     ├── ImageThumbnail.tsx              # Thumbnail image component
     ├── KeyboardShortcutsModal.tsx      # Modal helpscreen component showing available keyboard shortcuts
     ├── main.tsx            
+    ├── PdfViewer.tsx                   # PDF viewer component
+    ├── PdfThumbnail.tsx                # PDF thumbnail component
     ├── Slideshow.tsx                   # Slideshow component
     ├── SlideshowControls.tsx           # Slideshow controls component
     ├── ThumbnailGrid.tsx               # Thumbnail grid component

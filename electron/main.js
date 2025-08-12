@@ -48,7 +48,8 @@ app.on('window-all-closed', () => {
 });
 
 // Main process IPC handlers
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.tiff', '.tif', '.ico'];
+const PDF_EXTENSIONS = ['.pdf'];
 
 // Function to get image metadata
 const getImageMetadata = async (filePath) => {
@@ -85,6 +86,28 @@ const getRootDrives = () => {
     }
 };
 
+ipcMain.handle('generate-pdf-thumbnail', async (event, filePath) => {
+    try {
+        // We'll use pdf-poppler or pdf2pic for server-side PDF thumbnail generation
+        // For now, we'll return null and handle PDF rendering in the frontend
+        return null;
+    } catch (error) {
+        console.error('Error generating PDF thumbnail:', error);
+        return null;
+    }
+});
+
+ipcMain.handle('get-pdf-page-count', async (event, filePath) => {
+    try {
+        // This would require a PDF library in the main process
+        // For simplicity, we'll handle this in the frontend
+        return null;
+    } catch (error) {
+        console.error('Error getting PDF page count:', error);
+        return null;
+    }
+});
+
 // IPC handler to get root directories
 ipcMain.handle('get-root-dirs', async () => {
     try {
@@ -116,28 +139,54 @@ ipcMain.handle('read-directory', async (event, folderPath) => {
         const files = fs.readdirSync(folderPath, { withFileTypes: true });
         const directories = [];
         const images = [];
+        const pdfs = [];
 
         for (const file of files) {
             const fullPath = path.join(folderPath, file.name);
             if (file.isDirectory()) {
                 directories.push({ name: file.name, path: fullPath });
-            } else if (file.isFile() && IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
-                let exif = {};
-                try {
-                    exif = await exifr.parse(fullPath);
-                } catch (error) {
-                    console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
+            } else if (file.isFile()) {
+                switch (path.extname(file.name).toLowerCase())
+                {
+                    case (IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())):
+                        let exif = {};
+
+                        try {
+                            exif = await exifr.parse(fullPath);
+                        } catch (error) {
+                            console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
+                        }
+
+                        const meta = await getImageMetadata(fullPath);
+                        images.push({ name: file.name, path: fullPath, ...meta, ...exif });
+
+                        break;
+                    case (PDF_EXTENSIONS.includes(path.extname(file.name).toLowerCase())):
+                        pdfs.push({ name: file.name, path: fullPath });
+
+                        break;
+                    default:
+                        break;
                 }
-                const meta = await getImageMetadata(fullPath);
-                images.push({ name: file.name, path: fullPath, ...meta, ...exif });
+
+                // if (IMAGE_EXTENSIONS.includes(path.extname(file.name).toLowerCase())) {
+                //     let exif = {};
+                //     try {
+                //         exif = await exifr.parse(fullPath);
+                //     } catch (error) {
+                //         console.warn(`Attempted to get exif information from a non-image file: ${fullPath}`);
+                //     }
+                //     const meta = await getImageMetadata(fullPath);
+                //     images.push({ name: file.name, path: fullPath, ...meta, ...exif });
+                // }
             }
         }
 
-        return { directories, images };
+        return { directories, images, pdfs };
     } catch (error) {
         console.error(`Failed to read directory ${folderPath}:`, error);
 
-        return { directories: [], images: [], error: error.message };
+        return { directories: [], images: [], pdfs: [], error: error.message };
     }
 });
 
@@ -150,6 +199,16 @@ ipcMain.handle('read-image', async (event, imagePath) => {
         return dataUrl;
     } catch (error) {
         console.error(`Failed to read image ${imagePath}:`, error);
+        return null;
+    }
+});
+
+ipcMain.handle('render-pdf-page', async (event, filePath, pageNumber, scale = 1) => {
+    try {
+        // This would be handled by PDF.js in the frontend
+        return null;
+    } catch (error) {
+        console.error('Error rendering PDF page:', error);
         return null;
     }
 });

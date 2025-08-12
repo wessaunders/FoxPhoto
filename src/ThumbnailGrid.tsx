@@ -8,13 +8,13 @@ import {
     SimpleGrid, 
     Text 
 } from '@mantine/core';
-import { DirectoryType, ImageType } from './interfaces/ui'; 
+import { DirectoryType, ImageType, ItemType, PdfType } from './interfaces/ui'; 
 import { IconFileBroken } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 import ImageThumbnail from './ImageThumbnail';
+import PdfThumbnail from './PdfThumbnail';
 import useFoxPhotoStore from './store/store';
 
-type Item = (DirectoryType | ImageType) & { type: 'directory' | 'image' };
 
 const ThumbnailGrid = () => {
     const { 
@@ -22,6 +22,7 @@ const ThumbnailGrid = () => {
         error,
         images,
         loadingState,
+        pdfs,
         readDirectory,
         selectImage,
         selectedImagesForSlideshow,
@@ -47,12 +48,12 @@ const ThumbnailGrid = () => {
         }
     }, [containerWidth, thumbnailSize])
 
-    const handleThumbnailClick = (image: ImageType) => {
-        selectImage(image.path);
-    };
-
     const handleDirectoryClick = (directory: DirectoryType) => {
         readDirectory(directory.path);
+    };
+
+    const handleThumbnailClick = (image: ImageType) => {
+        selectImage(image.path);
     };
 
     if (error) {
@@ -63,7 +64,7 @@ const ThumbnailGrid = () => {
         );
     }
 
-    if (images.length === 0) {
+    if (images.length === 0 && pdfs.length === 0) {
         if (!loadingState.isScanning) {
             return (
                 <Box p="md">
@@ -82,9 +83,10 @@ const ThumbnailGrid = () => {
         }
     } 
 
-    const allItems: Item[] = [
+    const allItems: ItemType[] = [
         ...directories.map(dir => ({ ...dir, type: 'directory' as const })),
-        ...images.map(img => ({ ...img, type: 'image' as const }))
+        ...images.map(img => ({ ...img, type: 'image' as const })),
+        ...pdfs.map(pdf => ({ ...pdf, type: 'pdf' as const }))
     ];
 
     return (
@@ -134,6 +136,13 @@ const ThumbnailGrid = () => {
                                     }}
                                 />
                             </Flex>
+                        )}
+                        {item.type === 'pdf' && (
+                            <PdfThumbnail 
+                                key={item.path}
+                                filePath={item.path}
+                                fileName={item.name}
+                                onClick={() => handleThumbnailClick(item)} />
                         )}
                         {item.type === 'directory' && (
                             <Flex
