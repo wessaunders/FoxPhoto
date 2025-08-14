@@ -33,22 +33,14 @@ const PdfViewer = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const loadPage = useCallback(async (pageNum: number, currentScale: number) => {
-        if (selectedImage && selectedImage.path) {
-            try {
-                setLoading(true);
-                setError(null);
-                const imageUrl = await PdfRenderer.renderPage(selectedImage.path, pageNum, currentScale);
-                setPageImage(imageUrl);
-            } catch (err) {
-                console.error('Error loading page:', err);
-                setError('Failed to load page');
-            } finally {
-                setLoading(false);
-            }
-        }
-
-    }, [selectedImage]);
+    const scaleOptions = [
+        { value: '0.5', label: '50%' },
+        { value: '0.75', label: '75%' },
+        { value: '1', label: '100%' },
+        { value: '1.25', label: '125%' },
+        { value: '1.5', label: '150%' },
+        { value: '2', label: '200%' },
+    ];
 
     useEffect(() => {
         if (selectedImage) {
@@ -71,10 +63,32 @@ const PdfViewer = () => {
     }, [selectedImage]);
 
     useEffect(() => {
-        if (pdfInfo) {
-            loadPage(currentPage, scale);
+        if (pdfInfo && selectedImage && selectedImage.path) {
+            setLoading(true);
+            setError(null);
+
+            (async () => {
+                try {
+                    if (selectedImage.path) {
+                        const imageUrl = await PdfRenderer.renderPage(
+                            selectedImage.path, 
+                            currentPage, 
+                            scale);
+                        setPageImage(imageUrl);
+                    }
+                } catch (err) {
+                    console.error('Error loading page:', err);
+                    setError('Failed to load page');
+                } finally {
+                    setLoading(false);
+                }
+            })();
         }
-    }, [currentPage, scale, pdfInfo, loadPage]);
+    }, [pdfInfo, selectedImage, currentPage, scale]);
+
+    const findClosestScaleOption = scaleOptions.reduce((prev, curr) =>
+        Math.abs(parseFloat(curr.value) - scale) < Math.abs(parseFloat(prev.value) - scale) ? curr : prev
+    );
 
     const handlePreviousPage = () => {
         if (currentPage > 1) {
@@ -96,14 +110,7 @@ const PdfViewer = () => {
         setScale(Math.max(scale / 1.2, 0.5));
     };
 
-    const scaleOptions = [
-        { value: '0.5', label: '50%' },
-        { value: '0.75', label: '75%' },
-        { value: '1', label: '100%' },
-        { value: '1.25', label: '125%' },
-        { value: '1.5', label: '150%' },
-        { value: '2', label: '200%' },
-    ];
+
 
     return (
         <>
@@ -155,7 +162,7 @@ const PdfViewer = () => {
 
                                 <Select
                                     data={scaleOptions}
-                                    value={scale.toString()}
+                                    value={findClosestScaleOption.value}
                                     onChange={(value) => value && setScale(parseFloat(value))}
                                     size="sm"
                                     w={80}
@@ -168,7 +175,7 @@ const PdfViewer = () => {
                         </Group>
 
                         {/* PDF Content */}
-                        <ScrollArea h={600}>
+                        <ScrollArea h={600} w="100%">
                             <div style={{ textAlign: 'center', padding: '1rem' }}>
                                 {loading && <Loader size="lg" />}
                                 {error && (
@@ -180,8 +187,7 @@ const PdfViewer = () => {
                                     <Image
                                         src={pageImage}
                                         alt={`Page ${currentPage}`}
-                                        fit="contain"
-                                        style={{ maxWidth: '100%' }}
+                                        fit="none"
                                     />
                                 )}
                             </div>
