@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Modal, Image, Button, Group, Box, LoadingOverlay, Alert } from '@mantine/core';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import PdfViewer from './PdfViewer';
 import useFoxPhotoStore from './store/store';
 
 const FullImageView = () => {
@@ -83,16 +84,23 @@ const FullImageView = () => {
                         {error}
                     </Alert>
                 ) : (
-                    <Image
-                        src={imageDataUrl}
-                        alt="Full-sized image"
-                        style={{ 
-                            objectFit: 'contain', 
-                            maxHeight: '90vh', 
-                            maxWidth: '90vw',
-                            transform: `rotate(${selectedImage.rotation}deg)` 
-                        }}
-                    />
+                    <>
+                        {selectedImage.type === 'image' 
+                            && (<Image
+                                src={imageDataUrl}
+                                alt="Full-sized image"
+                                style={{
+                                    objectFit: 'contain',
+                                    maxHeight: '90vh',
+                                    maxWidth: '90vw',
+                                    transform: `rotate(${selectedImage.rotation}deg)`
+                                }}/>
+                            )
+                        }
+                        {selectedImage.type === 'pdf'
+                            && <PdfViewer />
+                        }
+                    </>
                 )}
             </Box>
 

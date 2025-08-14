@@ -9,16 +9,17 @@ import {
 } from '@mantine/core';
 import { BreadcrumbItem } from './interfaces/ui';
 import { useEffect, useState } from 'react';
+import { useHotkeys } from '@mantine/hooks';
 import AdvancedSearchModal from './AdvancedSeachModal';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
 import ImageView from './ImageView';
+import PdfViewer from './PdfViewer';
 import Slideshow from './Slideshow';
 import ThumbnailGrid from './ThumbnailGrid';
 import useFoxPhotoStore from './store/store';
-import { useHotkeys } from '@mantine/hooks';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
@@ -37,10 +38,7 @@ const App = () => {
         toggleAdvancedSearch, 
         toggleKeyboardShortcuts
     } = useFoxPhotoStore();
-
-
     useKeyboardShortcuts({});
-
     useHotkeys([
         ['?', () => toggleKeyboardShortcuts],
         ['F1', () => toggleKeyboardShortcuts],
@@ -67,7 +65,6 @@ const App = () => {
         const path = pathParts.slice(0, index + 1).join('/');
         return { title: part, href: path };
     });
-
 
     return (
         <>
@@ -128,6 +125,7 @@ const App = () => {
                             style={{ flex: 1, minHeight: 0 }}>
                             <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ImageView />
+                                <PdfViewer />
                             </Box>
                             <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
                                 <ThumbnailGrid />

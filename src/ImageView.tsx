@@ -1,7 +1,8 @@
 import { ActionIcon, Alert, Box, Group, Image, LoadingOverlay, Stack } from "@mantine/core";
+import { IconArrowsDiagonal } from "@tabler/icons-react";
+import { FileTypes } from "./interfaces/ui";
 import { useEffect, useState } from "react";
 import useFoxPhotoStore from "./store/store";
-import { IconArrowsDiagonal } from "@tabler/icons-react";
 
 const ImageView = () => {
     const { selectedImage, setShowFullSizeImage } = useFoxPhotoStore();
@@ -54,7 +55,8 @@ const ImageView = () => {
 
     return (
         <>
-            { selectedImage &&
+            {selectedImage &&
+                selectedImage.type === FileTypes.ImageType &&
                 <Stack>
                     <Box style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <LoadingOverlay visible={isLoading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
