@@ -45,9 +45,6 @@ const App = () => {
     ]);
 
     const [navbarClosed, setNavbarClosed] = useState(false);
-    const [pdfViewerOpened, setPdfViewerOpened] = useState(false);
-    const [currentPdfPath, setCurrentPdfPath] = useState<string | null>(null);
-    const [currentPdfName, setCurrentPdfName] = useState<string | undefined>(undefined);
 
     /** Initial load for settings and then directories */
     useEffect(() => {
@@ -68,18 +65,6 @@ const App = () => {
         const path = pathParts.slice(0, index + 1).join('/');
         return { title: part, href: path };
     });
-
-    const closePdfViewer = () => {
-        setPdfViewerOpened(false);
-        setCurrentPdfPath(null);
-        setCurrentPdfName(undefined);
-    };
-
-    const openPdfViewer = (filePath: string, fileName: string) => {
-        setCurrentPdfPath(filePath);
-        setCurrentPdfName(fileName);
-        setPdfViewerOpened(true);
-    };
 
     return (
         <>

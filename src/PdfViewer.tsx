@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import {
-    Modal,
     Group,
     ActionIcon,
     Text,
@@ -19,13 +18,14 @@ import {
     IconZoomOut,
     IconMaximize,
     IconX,
+    IconArrowsDiagonal,
 } from '@tabler/icons-react';
 import { PdfRenderer, PdfInfo } from './utils/pdfUtils';
 import useFoxPhotoStore from './store/store';
 import { FileTypes } from './interfaces/ui';
 
 const PdfViewer = () => {
-    const { selectedImage, setShowFullSizeImage } = useFoxPhotoStore();
+    const { selectedImage, showFullSizeImage, setShowFullSizeImage } = useFoxPhotoStore();
     const [currentPage, setCurrentPage] = useState(1);
     const [pdfInfo, setPdfInfo] = useState<PdfInfo | null>(null);
     const [pageImage, setPageImage] = useState<string | null>(null);
@@ -175,7 +175,9 @@ const PdfViewer = () => {
                         </Group>
 
                         {/* PDF Content */}
-                        <ScrollArea h={600} w="100%">
+                        <ScrollArea 
+                            h={showFullSizeImage ? "90vh" : "70vh"} 
+                            w="100%">
                             <div style={{ textAlign: 'center', padding: '1rem' }}>
                                 {loading && <Loader size="lg" />}
                                 {error && (
@@ -192,6 +194,15 @@ const PdfViewer = () => {
                                 )}
                             </div>
                         </ScrollArea>
+
+                        { !showFullSizeImage
+                            && (<Group justify="flex-end">
+                                <ActionIcon
+                                    onClick={setShowFullSizeImage}>
+                                    <IconArrowsDiagonal size={24} />
+                                </ActionIcon>
+                            </Group>)
+                        }                       
                     </Stack>
                 )
             }        
