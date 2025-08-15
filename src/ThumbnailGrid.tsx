@@ -52,10 +52,6 @@ const ThumbnailGrid = () => {
         readDirectory(directory.path);
     };
 
-    const handleThumbnailClick = (image: ImageType) => {
-        selectImage(image.path);
-    };
-
     if (error) {
         return (
             <Alert title="Error" color="red">
@@ -107,42 +103,14 @@ const ThumbnailGrid = () => {
                         }}
                     >
                         {item.type === 'image' && (
-                            <Flex
-                                direction="column"
-                                align="center"
-                                justify="center"
-                                onClick={() => handleThumbnailClick(item)}
-                            >
-                                <Box style={{ width: '100%', aspectRatio: '1/1', overflow: 'hidden' }}>
-                                    <Image
-                                        src={item.path}
-                                        alt={item.name}
-                                        style={{ 
-                                            objectFit: 'cover', 
-                                            height: '100%', 
-                                            width: '100%' }}
-                                    />
-                                </Box>
-                                <Text truncate mt="xs" size="sm" ta="center">{item.name}</Text>
-                                <Checkbox
-                                    checked={selectedImagesForSlideshow.includes(item.path)}
-                                    onChange={() => toggleImageForSlideshow(item.path)}
-                                    onClick={(e) => e.stopPropagation()} // Prevent parent click from firing
-                                    style={{
-                                        position: 'absolute',
-                                        top: '0.5rem',
-                                        right: '0.5rem',
-                                        zIndex: 2,
-                                    }}
-                                />
-                            </Flex>
+                            <ImageThumbnail 
+                                image={item} />
                         )}
                         {item.type === 'pdf' && (
                             <PdfThumbnail 
                                 key={item.path}
                                 filePath={item.path}
-                                fileName={item.name}
-                                onClick={() => handleThumbnailClick(item)} />
+                                fileName={item.name} />
                         )}
                         {item.type === 'directory' && (
                             <Flex

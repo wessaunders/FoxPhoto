@@ -174,7 +174,6 @@ const PdfViewer = () => {
                             </Group>
                         </Group>
 
-                        {/* PDF Content */}
                         <ScrollArea 
                             h={showFullSizeImage ? "90vh" : "70vh"} 
                             w="100%">

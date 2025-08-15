@@ -94,28 +94,37 @@ foxphoto/
 ├── package.json                        # Project metadata and dependencies
 ├── electron/
 │   ├── main.js                         # Electron Main Process (backend operations)
-│   ├── preload.js                      # Electron Preload Script (secure IPC bridge)
+│   └── preload.js                      # Electron Preload Script (secure IPC bridge)
 └── src/
+    ├── constants/
+    │   └── searchConstants.ts          # Constants for use when searching
     ├── hooks/
-    │   └── useImageDataLoader.ts
+    │   ├── useImageDataLoader.ts       # Image data loader hook (obsolete)
+    │   └── useKeyboardShortcuts.ts     # Keyboard shortcuts hook
+    ├── interfaces/
+    │   ├── global.d.ts                 # Global function typescriptinterfaces
+    │   └── ui.ts                       # UI typescript interfaces
     ├── store/
     │   ├── createDirectorySlice.ts     # Zustand store slice containing directory functionality
     │   ├── createSearchSlice.ts        # Zustand store slice containing search functionality
     │   ├── createSetingsSlice.ts       # Zustand store slice containing persistent settings functionality
     │   ├── createSlideshowSlice.ts     # Zustand store slice containing slideshow functionality
     │   └── store.ts                    # Zustand global state store
+    ├── utils/
+    │   ├── pdfUtils.ts                 # PDF display and viewing utilities
     ├── AdvancedSearchModal.tsx         # Advanced search modal component
     ├── AppFooter.tsx                   # Main React application footer component
     ├── AppHeader.tsx                   # Main React application header component
     ├── App.tsx                         # Main React application component
     ├── FileExplorer.tsx                # File explorer component
     ├── FullImageView.tsx               # Full image view component
-    ├── ImageView.tsx                   # Image view component
     ├── ImageThumbnail.tsx              # Thumbnail image component
+    ├── ImageView.tsx                   # Image view component
     ├── KeyboardShortcutsModal.tsx      # Modal helpscreen component showing available keyboard shortcuts
     ├── main.tsx            
-    ├── PdfViewer.tsx                   # PDF viewer component
     ├── PdfThumbnail.tsx                # PDF thumbnail component
+    ├── PdfViewer.tsx                   # PDF viewer component
+    ├── slideshow.css                   # Slideshow style sheet
     ├── Slideshow.tsx                   # Slideshow component
     ├── SlideshowControls.tsx           # Slideshow controls component
     ├── ThumbnailGrid.tsx               # Thumbnail grid component
