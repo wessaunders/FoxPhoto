@@ -7,6 +7,7 @@ FoxPhoto is a desktop application built with Electron, React v19, and Zustand, d
 * **File System Navigation:** Easily browse your drives and folders.
 * **Thumbnail Grid:** View all images in a selected folder as a responsive grid of thumbnails.
 * **Full Image View:** Open images in a full-screen mode with navigation controls (next/previous).
+* **Image EXIF Information:** View and edit image EXIF information
 * **Advanced Search:** Search and order by name, date, and resolution
 * **Loading & Error Handling:** Visual feedback for loading states and graceful handling of errors.
 * **Modern UI:** Clean and intuitive user interface powered by Mantine UI.
@@ -106,8 +107,10 @@ foxphoto/
     │   └── ui.ts                       # UI typescript interfaces
     ├── store/
     │   ├── createDirectorySlice.ts     # Zustand store slice containing directory functionality
+    │   ├── createHotKeysSlice.ts       # Zustand store slice containing hotkeys functionality
+    │   ├── createImageInfoSlice.ts     # Zustand store slice containing image info functionality
     │   ├── createSearchSlice.ts        # Zustand store slice containing search functionality
-    │   ├── createSetingsSlice.ts       # Zustand store slice containing persistent settings functionality
+    │   ├── createSettingsSlice.ts      # Zustand store slice containing persistent settings functionality
     │   ├── createSlideshowSlice.ts     # Zustand store slice containing slideshow functionality
     │   └── store.ts                    # Zustand global state store
     ├── utils/
@@ -118,6 +121,7 @@ foxphoto/
     ├── App.tsx                         # Main React application component
     ├── FileExplorer.tsx                # File explorer component
     ├── FullImageView.tsx               # Full image view component
+    ├── ImageInfoPanel.tsx              # Image information panel component
     ├── ImageThumbnail.tsx              # Thumbnail image component
     ├── ImageView.tsx                   # Image view component
     ├── KeyboardShortcutsModal.tsx      # Modal helpscreen component showing available keyboard shortcuts
@@ -127,6 +131,7 @@ foxphoto/
     ├── slideshow.css                   # Slideshow style sheet
     ├── Slideshow.tsx                   # Slideshow component
     ├── SlideshowControls.tsx           # Slideshow controls component
+    ├── ThumbnailGrid.css               # Thumbnail grid style sheet
     ├── ThumbnailGrid.tsx               # Thumbnail grid component
     └── ThumbnailSizeControl.tsx        # Thumbnail size component
 ```

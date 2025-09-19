@@ -35,7 +35,10 @@ const useKeyboardShortcuts = (props: Partial<KeyboardShortcuts>) => {
         selectImage,
         selectedImage,
         setShowFullSizeImage,
-        showFullSizeImage
+        showFullSizeImage,
+
+        // Image info
+        toggleImageInfo
     } = useFoxPhotoStore();
 
     // Navigation shortcuts
@@ -90,6 +93,11 @@ const useKeyboardShortcuts = (props: Partial<KeyboardShortcuts>) => {
         ['f', () => {
             if (selectedImage !== null) {
                 setShowFullSizeImage();
+            }
+        }],
+        ['i', () => {
+            if (selectedImage !== null) {
+                toggleImageInfo();
             }
         }],
     ]);

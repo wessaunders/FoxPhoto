@@ -1,0 +1,8 @@
+.thumbnail-grid-list {
+    display: grid;
+    grid-template-columns: repeat(var(--thumbnail-grid-cols, 4), 1fr);
+    gap: 24px;
+    height: 100%;
+    padding: 12px;
+    /* width: 100%; */
+}

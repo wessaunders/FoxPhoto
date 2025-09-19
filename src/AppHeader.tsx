@@ -10,7 +10,7 @@ import {
     Tooltip,
     useMantineColorScheme
 } from '@mantine/core';
-import { IconArrowBackUp, IconHome, IconPlayerPlay, IconFilterSearch, IconSearch, IconMoon, IconSun, IconX, IconQuestionMark } from '@tabler/icons-react';
+import { IconArrowBackUp, IconHome, IconPlayerPlay, IconFilterSearch, IconSearch, IconMoon, IconSun, IconX, IconQuestionMark, IconInfoCircle } from '@tabler/icons-react';
 import useFoxPhotoStore from './store/store';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 
@@ -27,12 +27,14 @@ const AppHeader = (props: AppHeaderProps) => {
         currentPath,
         images,
         navigateToParent,
-        readDirectory, 
+        readDirectory,
         searchTerm,
+        selectedImage,
         selectedImagesForSlideshow,
         setSearchTerm,
         setStartingPath,
-        startSlideshow, 
+        startSlideshow,
+        toggleImageInfo,
         toggleKeyboardShortcuts,
     } = useFoxPhotoStore();
 
@@ -95,6 +97,15 @@ const AppHeader = (props: AppHeaderProps) => {
                     onClick={onToggleAdvancedSearch}>
                     <IconFilterSearch size={20} />
                 </ActionIcon>
+
+                <Tooltip label="Image Info (I)">
+                    <ActionIcon
+                        variant="subtle"
+                        onClick={toggleImageInfo}
+                        disabled={!selectedImage?.path}>
+                        <IconInfoCircle size={20} />
+                    </ActionIcon>
+                </Tooltip>
             </Group>
             <Group>
                 <SegmentedControl

@@ -8,13 +8,15 @@ import {
     SimpleGrid, 
     Text 
 } from '@mantine/core';
-import { DirectoryType, ImageType, ItemType, PdfType } from './interfaces/ui'; 
+import { DirectoryType, ItemType } from './interfaces/ui';
 import { IconFileBroken } from '@tabler/icons-react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { VirtuosoGrid } from 'react-virtuoso';
 import ImageThumbnail from './ImageThumbnail';
 import PdfThumbnail from './PdfThumbnail';
 import useFoxPhotoStore from './store/store';
 
+import './ThumbnailGrid.css';
 
 const ThumbnailGrid = () => {
     const { 
@@ -24,15 +26,14 @@ const ThumbnailGrid = () => {
         loadingState,
         pdfs,
         readDirectory,
-        selectImage,
-        selectedImagesForSlideshow,
         thumbnailSize, 
-        toggleImageForSlideshow
     } = useFoxPhotoStore();
 
+    const GRID_GAP = 24;
     const gridRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState<number>(window.innerWidth);
     const [cols, setCols] = useState<number>(4);
+
 
     useEffect(() => {
         if (gridRef && gridRef.current) {
@@ -42,7 +43,7 @@ const ThumbnailGrid = () => {
 
     useEffect(() => {
         if (containerWidth && thumbnailSize) {
-            const minColumnWidth = thumbnailSize + 24;
+            const minColumnWidth = thumbnailSize + GRID_GAP;
             const calculatedColumns = Math.max(1, Math.floor(containerWidth / minColumnWidth));
             setCols(calculatedColumns);
         }
@@ -137,12 +138,8 @@ const ThumbnailGrid = () => {
                         )}
                     </Box>
                 ))}
-
-                {/* {images.map((image) => (
-                <ImageThumbnail key={image.path} image={image} selectImage={selectImage} />
-            ))} */}
             </SimpleGrid>
-        </ScrollArea>
+        </ScrollArea>            
     );
 }
 

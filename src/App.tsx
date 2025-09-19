@@ -15,6 +15,7 @@ import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import FileExplorer from './FileExplorer';
 import FullImageView from './FullImageView';
+import ImageInfoPanel from './ImageInfoPanel';
 import ImageView from './ImageView';
 import PdfViewer from './PdfViewer';
 import Slideshow from './Slideshow';
@@ -24,18 +25,19 @@ import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 
 const App = () => {
-    const { 
+    const {
         advancedSearchOpen,
         currentPath,
-        getRootDirs, 
+        getRootDirs,
+        isImageInfoOpen,
         isSlideshowActive,
         keyboardShortcutsOpened,
         loadSettings,
-        loadingState, 
-        readDirectory, 
+        loadingState,
+        readDirectory,
         showFullSizeImage,
         startingPath,
-        toggleAdvancedSearch, 
+        toggleAdvancedSearch,
         toggleKeyboardShortcuts
     } = useFoxPhotoStore();
     useKeyboardShortcuts({});
@@ -91,10 +93,12 @@ const App = () => {
                     <FileExplorer />
                 </AppShell.Navbar>
 
-                <AppShell.Main 
+                <AppShell.Main
                     style={{
                         overflowY: 'hidden',
-                        maxHeight: '100vh'
+                        height: 'calc(100vh - 120px)', // 60px header + 60px footer
+                        display: 'flex',
+                        flexDirection: 'column'
                     }}>
                     {currentPath && (
                         <Breadcrumbs>
@@ -107,29 +111,34 @@ const App = () => {
                         </Breadcrumbs>
                     )}
 
-                    <Paper 
-                        p="md" 
-                        shadow="sm" 
-                        radius="md" 
-                        h="100%"
-                        style={{ 
+                    <Paper
+                        p="md"
+                        shadow="sm"
+                        radius="md"
+                        style={{
+                            flex: 1,
                             display: 'flex',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            minHeight: 0
                         }}>
                         <LoadingOverlay visible={loadingState.isScanning} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
 
-                        <Flex 
-                            direction="row" 
-                            gap="md" 
-                            h="100%"
+                        <Flex
+                            direction="row"
+                            gap="md"
                             style={{ flex: 1, minHeight: 0 }}>
-                            <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
+                            <Box style={{ flex: 1, minWidth: 0, height: '100%' }}>
                                 <ImageView />
                                 <PdfViewer />
                             </Box>
-                            <Box h="100%" style={{ flex: 1, minWidth: 0 }}>
+                            <Box style={{ flex: 1, minWidth: 0, height: '100%' }}>
                                 <ThumbnailGrid />
                             </Box>
+                            {isImageInfoOpen && (
+                                <Box style={{ minWidth: 350, maxWidth: 350, height: '100%' }}>
+                                    <ImageInfoPanel />
+                                </Box>
+                            )}
                         </Flex>
                     </Paper>
                 </AppShell.Main>
